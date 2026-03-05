@@ -1,0 +1,50 @@
+[
+{
+  "directory": "C:/LarianStudios/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\main.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\main.cpp",
+  "file": "C:/LarianStudios/Green-Ninja/src/main.cpp",
+  "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/main.cpp.obj"
+},
+{
+  "directory": "C:/LarianStudios/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\Game.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\Game.cpp",
+  "file": "C:/LarianStudios/Green-Ninja/src/Game.cpp",
+  "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/Game.cpp.obj"
+},
+{
+  "directory": "C:/LarianStudios/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\TextureManager.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\TextureManager.cpp",
+  "file": "C:/LarianStudios/Green-Ninja/src/TextureManager.cpp",
+  "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/TextureManager.cpp.obj"
+},
+{
+  "directory": "C:/LarianStudios/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\Player.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\Player.cpp",
+  "file": "C:/LarianStudios/Green-Ninja/src/Player.cpp",
+  "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/Player.cpp.obj"
+},
+{
+  "directory": "C:/LarianStudios/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\Projectile.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\Projectile.cpp",
+  "file": "C:/LarianStudios/Green-Ninja/src/Projectile.cpp",
+  "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/Projectile.cpp.obj"
+},
+{
+  "directory": "C:/LarianStudios/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\Grid.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\Grid.cpp",
+  "file": "C:/LarianStudios/Green-Ninja/src/Grid.cpp",
+  "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/Grid.cpp.obj"
+},
+{
+  "directory": "C:/LarianStudios/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\Tile.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\Tile.cpp",
+  "file": "C:/LarianStudios/Green-Ninja/src/Tile.cpp",
+  "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/Tile.cpp.obj"
+},
+{
+  "directory": "C:/LarianStudios/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\Room.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\Room.cpp",
+  "file": "C:/LarianStudios/Green-Ninja/src/Room.cpp",
+  "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/Room.cpp.obj"
+}
+]

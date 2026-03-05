@@ -1,0 +1,10 @@
+# ninja log v7
+11	1107	7944409382631295	CMakeFiles/ElementalGridTactics.dir/src/TextureManager.cpp.obj	309b39882308e955
+18	1275	7944409382691452	CMakeFiles/ElementalGridTactics.dir/src/Projectile.cpp.obj	7792ac40bcc8f8df
+23	1292	7944409382743422	CMakeFiles/ElementalGridTactics.dir/src/Tile.cpp.obj	a98866195e519e99
+5	1540	7944409382566075	CMakeFiles/ElementalGridTactics.dir/src/main.cpp.obj	573bc6e13382ba08
+26	1661	7944409382778508	CMakeFiles/ElementalGridTactics.dir/src/Room.cpp.obj	a7d643a31631dc06
+15	1669	7944409382658695	CMakeFiles/ElementalGridTactics.dir/src/Player.cpp.obj	83c5a93e46abe3e0
+20	1735	7944409382723435	CMakeFiles/ElementalGridTactics.dir/src/Grid.cpp.obj	8b145542d481ad9c
+8	1949	7944409382601242	CMakeFiles/ElementalGridTactics.dir/src/Game.cpp.obj	1fc56b92108c9b
+1949	2197	7944409401994393	ElementalGridTactics.exe	c2a966c53043cfed

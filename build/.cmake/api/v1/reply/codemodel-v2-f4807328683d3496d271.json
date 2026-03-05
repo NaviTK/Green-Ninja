@@ -1,0 +1,204 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "JPEG::JPEG::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-JPEG__JPEG-Debug-29a3724c06d065a54837.json",
+					"name" : "JPEG::JPEG",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "PNG::PNG::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-PNG__PNG-Debug-ac8f9edaa53c292f7d78.json",
+					"name" : "PNG::PNG",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SDL2::SDL2::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SDL2__SDL2-Debug-f4e8f509b7f696d2ed74.json",
+					"name" : "SDL2::SDL2",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SDL2::SDL2-static::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SDL2__SDL2-static-Debug-68ede81444ccdac620e0.json",
+					"name" : "SDL2::SDL2-static",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SDL2::SDL2main::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SDL2__SDL2main-Debug-99594e05c10525af5ffa.json",
+					"name" : "SDL2::SDL2main",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SDL2::SDL2test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SDL2__SDL2test-Debug-39ae1eb00ea9d5d4935c.json",
+					"name" : "SDL2::SDL2test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SDL2_image::SDL2_image::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SDL2_image__SDL2_image-Debug-2d4666e1f16d2288aa28.json",
+					"name" : "SDL2_image::SDL2_image",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SDL2_image::SDL2_image-static::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SDL2_image__SDL2_image-static-Debug-7ff07ee08b97f94ba958.json",
+					"name" : "SDL2_image::SDL2_image-static",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "TIFF::CXX::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-TIFF__CXX-Debug-477be1a30bb4af10d86b.json",
+					"name" : "TIFF::CXX",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "TIFF::TIFF::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-TIFF__TIFF-Debug-5207bbaa5e62711d5ce0.json",
+					"name" : "TIFF::TIFF",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "WebP::webp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-WebP__webp-Debug-dd152e8e63411449102f.json",
+					"name" : "WebP::webp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "WebP::webpdemux::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-WebP__webpdemux-Debug-91c6348d38e88787c8f8.json",
+					"name" : "WebP::webpdemux",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ZLIB::ZLIB::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ZLIB__ZLIB-Debug-0ce0b441c4a6d7930431.json",
+					"name" : "ZLIB::ZLIB",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "avif::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-avif-Debug-2a13ca2bff3a45fd8e0b.json",
+					"name" : "avif",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "libjxl::libjxl::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-libjxl__libjxl-Debug-d18d48951eea9f231e07.json",
+					"name" : "libjxl::libjxl",
+					"projectIndex" : 0
+				}
+			],
+			"directories" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14
+					],
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f6f22219c74102c3da70.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "ElementalGridTactics",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ElementalGridTactics::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ElementalGridTactics-Debug-5030240f2f107d7b460f.json",
+					"name" : "ElementalGridTactics",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/LarianStudios/Green-Ninja/build",
+		"source" : "C:/LarianStudios/Green-Ninja"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	}
+}
