@@ -4,6 +4,10 @@
 #include <map>     // Necesario para std::map
 #include <utility> // Necesario para std::pair
 #include "RoomType.hpp"
+#include <cstdlib>   // Para rand() y srand()
+#include <ctime>     // Para time()
+#include <algorithm> // Para std::shuffle
+#include <random>    // Para generación de números aleatorios moderna
 
 typedef std::pair<int, int> MapCoord;
 typedef std::vector<std::vector<int>> Mapa;
@@ -24,9 +28,9 @@ private:
     static const std::map<RoomType, std::pair<int, int>> roomSizes; // Mapa estático que asigna un tamaño específico a cada tipo de habitación (en filas y columnas)
 
     // propiedades
-    int id;            // id unico de la habitacion
-    Grid *roomGrid;    // grid unico de la habitacion
-    MapCoord mapCoord; // posicion en el mapa
+    int id;                         // id unico de la habitacion
+    Grid *roomGrid;                 // grid unico de la habitacion
+    MapCoord coordenadasQuadricula; // posicion en el mapa de quadricula
 
     // Conexiones con otras habitaciones (nullptr si hay pared y no hay salida)
     Room *topRoom;
@@ -39,8 +43,11 @@ private:
 
     std::list<std::pair<int, int>> getDoors(); // Devuelve la lista de coordenadas de las puertas de esta sala (para que Game sepa dónde dibujarlas y dónde detectar colisiones)
 
-    // Función interna recursiva que irá creando las habitaciones vecinas paso a paso
     Room *expandirMapa(int currentDepth, int maxDepth, std::map<int, Room *> &roomsMap, Mapa &mapa, direction direccion, MapCoord lastCoord);
+    // funcion para conseguir siguiente posicion en la quadricula durante la recursion
+    static MapCoord AñadirAlExpandir(MapCoord posicionActual, direction direccionActual);
+    // comprueba si la posicion de la cuadricula es correcta
+    bool pos_ok(MapCoord posicionCuadricula, Mapa &cuadricula);
 
 public:
     static direction getOpposite(direction dir);
