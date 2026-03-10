@@ -31,7 +31,7 @@ private:
     int id;                         // id unico de la habitacion
     Grid *roomGrid;                 // grid unico de la habitacion
     MapCoord coordenadasQuadricula; // posicion en el mapa de quadricula
-
+    static Mapa cuadriculaMapa;
     // Conexiones con otras habitaciones (nullptr si hay pared y no hay salida)
     Room *topRoom;
     Room *bottomRoom;
@@ -93,4 +93,6 @@ public:
     void setBottomRoom(Room *room) { bottomRoom = room; }
     void setLeftRoom(Room *room) { leftRoom = room; }
     void setRightRoom(Room *room) { rightRoom = room; }
+
+    const Mapa &getCuadricula() const { return cuadriculaMapa; }
 };

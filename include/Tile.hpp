@@ -23,10 +23,9 @@ public:
     void setType(TileType newType);
 
     // Comprobación de estado
-    // Mantenemos el nombre 'hasType' para no romper tu código existente,
-    // pero ahora simplemente comprueba si el tile es de ese tipo exacto.
     bool hasType(TileType flag) const;
 
+    bool isWalkable() const;
     // Limpieza
     void clearTo(TileType baseType);
 };

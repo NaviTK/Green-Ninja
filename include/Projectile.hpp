@@ -15,9 +15,10 @@ private:
 
     // --- NUEVOS ATRIBUTOS RECOMENDADOS ---
     double angle; // Ángulo en grados para rotar la textura (que la flecha mire a donde viaja)
-    int damage;   // Cuánto daño hará al impactar
+    float damage; // Cuánto daño hará al impactar
 
 public:
+    SDL_Rect getDestRect() const { return destRect; }
     // Constructor (He añadido el daño por defecto al final)
     Projectile(float x, float y, float targetX, float targetY, SDL_Texture *tex, float spd, float rng, int dmg = 10);
 
@@ -33,5 +34,5 @@ public:
     // Métodos propios de lógica y colisión
     bool isExpired() const;
     SDL_Rect getCollider() const; // Para comprobar choques en Game.cpp
-    int getDamage() const;        // Para restarle vida al enemigo
+    float getDamage() const;      // Para restarle vida al enemigo
 };

@@ -1,14 +1,13 @@
 #include "Player.hpp"
 #include "Grid.hpp"
-#include "TextureManager.hpp"
 #include <iostream>
-#include <string>
-
-// 1. DEFINICIÓN OBLIGATORIA de la variable estática
-SDL_Texture *Player::playerTexture = nullptr;
+#include <cmath> // Por si acaso para std::abs en shootLogic
 
 void Player::InicializarStadisticas(float posx, float posy)
 {
+    isTakingDmg = true;     // --- CAMBIADO A FALSE INICIALMENTE ---
+    dmgTimer = 1.0f;        // --- NUEVO: Temporizador para el daño ---
+    TakingDmgOffset = 64;   // Offset en píxeles en la hoja de sprites
     lastShot = 0;           // contador para volver a disparar
     oriented = SOUTH;       // Inicialmente mirando hacia abajo
     x = posx;               // posicion horizontal del jugador
@@ -27,22 +26,13 @@ void Player::setShootCallback(std::function<void(float, float, int, int, float, 
     onShootCallback = callback;
 }
 
-// 2. FUNCIÓN DE CARGA: Se debe llamar ANTES de crear al jugador o dentro del constructor de forma segura
-void Player::LoadTexture(const std::string &path, SDL_Renderer *renderer)
-{
-    if (playerTexture == nullptr)
-    {
-        playerTexture = TextureManager::LoadTexture(path.c_str(), renderer);
-    }
-}
-
-// 3. CONSTRUCTOR CORREGIDO
-Player::Player(float x, float y, SDL_Renderer *renderer)
-    : Entity(x, y, playerTexture), m_renderer(renderer)
+// --- CONSTRUCTOR CORREGIDO ---
+Player::Player(float x, float y, SDL_Renderer *renderer, SDL_Texture *texturaJugador)
+    : Entity(x, y, texturaJugador), m_renderer(renderer)
 {
     InicializarStadisticas(x, y);
-    // ASIGNACIÓN MANUAL: Como Entity ya se inicializó con nullptr, se lo asignamos ahora
-    this->texture = playerTexture;
+    // Asignamos la textura a la variable de la clase padre Entity explícitamente por seguridad
+    this->texture = texturaJugador;
 
     timerUp = timerDown = timerLeft = timerRight = 0;
     frameWidth = 16;
@@ -113,6 +103,16 @@ void Player::movementLogic(double deltaTime, Grid *grid)
 
 void Player::animationLogic(double deltaTime)
 {
+    // --- NUEVO: GESTIÓN DEL TEMPORIZADOR DE DAÑO ---
+    if (isTakingDmg)
+    {
+        dmgTimer -= deltaTime;
+        if (dmgTimer <= 0.0f)
+        {
+            isTakingDmg = false; // Se acaba el efecto de recibir daño
+        }
+    }
+
     // 1. ESTADO DE ATAQUE (Tiene prioridad absoluta)
     if (isAttacking)
     {
@@ -167,6 +167,12 @@ void Player::animationLogic(double deltaTime)
     case EAST:
         srcRect.x = frameWidth * 3;
         break;
+    }
+
+    // --- NUEVO: APLICAR OFFSET SI ESTÁ RECIBIENDO DAÑO ---
+    if (isTakingDmg)
+    {
+        srcRect.x += TakingDmgOffset;
     }
 }
 
@@ -308,4 +314,18 @@ bool Player::checkCollision(float nextX, float nextY, Grid *grid)
     }
 
     return false;
+}
+
+// --- NUEVA FUNCIÓN PARA RECIBIR DAÑO ---
+void Player::takeDamage(float amount)
+{
+    // Si ya estamos recibiendo daño (i-frames), ignoramos el nuevo golpe
+    if (isTakingDmg)
+        return;
+
+    health -= amount;
+    isTakingDmg = true;
+    dmgTimer = 0.5f; // Medio segundo de animación de daño e invulnerabilidad
+
+    std::cout << "Jugador recibe " << amount << " de daño! Vida restante: " << health << std::endl;
 }

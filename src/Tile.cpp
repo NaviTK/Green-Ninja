@@ -22,6 +22,14 @@ bool Tile::hasType(TileType flag) const
     return type == flag;
 }
 
+bool Tile::isWalkable() const
+{
+    if (type == TileType::FLOOR1 || type == TileType::FLOOR2 || type == TileType::FLOOR3)
+        return true;
+    else
+        return false;
+}
+
 void Tile::clearTo(TileType baseType)
 {
     type = baseType;

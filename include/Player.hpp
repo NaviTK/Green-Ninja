@@ -2,7 +2,7 @@
 #include "Entity.hpp"
 #include <string>
 #include <map>
-#include <functional> // <-- NUEVO: Necesario para std::function (Callbacks)
+#include <functional> // <-- Necesario para std::function (Callbacks)
 
 class Grid;
 
@@ -16,7 +16,9 @@ private:
     // Control de animaciones
     float animTimer = 0.0f;
     const float TIME_PER_FRAME = 0.15f; // Cambia de frame cada 0.15 segundos
-
+    bool isTakingDmg;
+    int TakingDmgOffset;
+    float dmgTimer;
     // Control del estado de ataque
     float attackTimer = 0.0f;
     bool isAttacking = false;
@@ -40,7 +42,7 @@ private:
         ATTACKING = 4,
         RUNNING = 5,
         DYING = 6
-    };
+    } currentState = EntityState::IDLE1;
 
     std::map<EntityState, EntityState> animationFrames = {
         {EntityState::IDLE1, EntityState::IDLE2},
@@ -50,8 +52,6 @@ private:
         {EntityState::RUNNING, EntityState::RUNNING},
         {EntityState::ATTACKING, EntityState::ATTACKING},
         {EntityState::DYING, EntityState::DYING}};
-
-    EntityState currentState = EntityState::IDLE1;
 
     // stadisticas
     float health;
@@ -65,30 +65,24 @@ private:
     // projectiles
     uint32_t lastShot;
 
-    // textura
-    static SDL_Texture *playerTexture;
-
-    // NUEVO: El "botón" de disparo.
-    // Guardará la función que Game.cpp le pase para crear el proyectil.
-    // Parámetros: (posicionJugadorX, posicionJugadorY, mouseX, mouseY, projectileSpeed, projectileSize, range, damage)
+    // El "botón" de disparo.
     std::function<void(float, float, int, int, float, float, float, float)> onShootCallback;
 
 public:
-    // Constructor
-    Player(float x, float y, SDL_Renderer *renderer);
+    // --- CONSTRUCTOR ACTUALIZADO (Añadido SDL_Texture*) ---
+    Player(float x, float y, SDL_Renderer *renderer, SDL_Texture *texturaJugador);
 
-    // Destructor (opcional si no añades punteros nuevos)
+    // Destructor
     ~Player() override = default;
 
-    // NUEVO: Método para que el Gestor (Game) enchufe la función de crear proyectiles
+    // Método para que el Gestor (Game) enchufe la función de crear proyectiles
     void setShootCallback(std::function<void(float, float, int, int, float, float, float, float)> callback);
 
     // Métodos sobreescritos
     void update(double deltaTime, Grid *grid) override;
-    // Usamos el render de la clase Entity por defecto
 
     // Método para inicializar las estadísticas del jugador
-    void InicializarStadisticas(float x, float y); // Cambiado a float para mayor precisión
+    void InicializarStadisticas(float x, float y);
 
     // game logic
     void takeDamage(float amount);
@@ -98,12 +92,10 @@ public:
     void animationLogic(double deltaTime);
     void shootLogic();
     bool checkCollision(float nextX, float nextY, Grid *grid);
+
     // setter/getters de posicion
     void setX(int newX) { x = newX; }
     void setY(int newY) { y = newY; }
     int getX() { return x; };
     int getY() { return y; };
-    // gestion de texturas
-    static void LoadTexture(const std::string &path, SDL_Renderer *renderer);
-    static void ReleaseResources();
 };

@@ -9,6 +9,8 @@
 #include "Room.hpp"
 #include <map>
 
+class Enemy;
+
 typedef std::vector<std::vector<int>> Mapa; // matriz donde cada elemento es un ID que usando el map de rooms podemos acceder a la Room concreta.
 
 class Game
@@ -38,10 +40,12 @@ private:
     // Entidades
     Player *player;
     std::vector<Projectile *> projectiles;
-    // std::vector<Zombie *> zombies;
-    // Textures
+    std::vector<Enemy *> enemies;
+    // Texturas
     std::map<std::string, std::string> spritePaths;
     SDL_Texture *projectileTexture = nullptr;
+    SDL_Texture *playerTexture = nullptr;
+    SDL_Texture *mapacheTexture = nullptr;
     // World
     std::map<int, Room *> rooms; // Mapa de habitaciones (id -> Room*)
     Room *currentRoom;           // La habitación actual en la que nos encontramos (inicialmente será la baseRoom)

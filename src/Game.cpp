@@ -3,32 +3,48 @@
 #include "ConfigLoader.hpp"
 #include "Projectile.hpp"
 #include "RoomType.hpp"
+#include "Mapache.hpp"
 #include <string>
 #include <iostream>
 
+// --- NUEVO: FUNCIÓN MATEMÁTICA DE COLISIÓN (AABB) ---
+static bool checkCollisionAABB(const SDL_Rect &a, const SDL_Rect &b)
+{
+    return (a.x < b.x + b.w &&
+            a.x + a.w > b.x &&
+            a.y < b.y + b.h &&
+            a.y + a.h > b.y);
+}
+
 Game::Game() : window(nullptr), renderer(nullptr), isRunning(false), player(nullptr), baseRoom(nullptr) {}
 
-Game::~Game() {}
+Game::~Game()
+{
+    // destruimos texturas
+    if (playerTexture)
+        SDL_DestroyTexture(playerTexture);
+    if (mapacheTexture)
+        SDL_DestroyTexture(mapacheTexture);
+    if (projectileTexture)
+        SDL_DestroyTexture(projectileTexture);
+}
 
 void Game::Inicialize(int width, int height)
 {
     windowWidht = width;
     windowHeight = height;
     camara = {0, 0, windowWidht, windowHeight};
-    mapa = Mapa(2 * depth + 1, std::vector<int>(2 * depth + 1, -1)); // Inicializamos el mapa con -1 (sin habitación)
+    mapa = Mapa(2 * depth + 1, std::vector<int>(2 * depth + 1, -1));
 }
 
 void Game::LoadAllTextures(SDL_Renderer *renderer)
 {
-    // Cargamos las rutas desde el archivo
     auto spritePaths = ConfigLoader::LoadSprites("../assets/sprites.txt");
 
-    // 1. Cargar texturas estáticas/globales
-    Player::LoadTexture(spritePaths["player"], renderer);
+    playerTexture = TextureManager::LoadTexture(spritePaths["player"].c_str(), renderer);
+    mapacheTexture = TextureManager::LoadTexture(spritePaths["mapache"].c_str(), renderer);
     projectileTexture = TextureManager::LoadTexture(spritePaths["projectile"].c_str(), renderer);
 
-    // 2. Cargar texturas para todas las habitaciones generadas
-    // Recorremos el std::map y cargamos las texturas de la grilla de cada Room
     if (!rooms.empty())
     {
         for (auto const &pair : rooms)
@@ -60,19 +76,15 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
         if (renderer)
         {
-            // 1. Generamos el nivel primero para saber cuánto mide
             baseRoom = Room::GenerarNivel(depth, rooms, mapa);
 
-            // Calculamos el tamaño real de la habitación en píxeles
             int roomPixelWidth = baseRoom->getGrid()->getCols() * baseRoom->getGrid()->getTileSize();
             int roomPixelHeight = baseRoom->getGrid()->getRows() * baseRoom->getGrid()->getTileSize();
 
-            // Le decimos a SDL que nuestra resolución interna es exactamente el tamaño de la sala.
             SDL_RenderSetLogicalSize(renderer, roomPixelWidth, roomPixelHeight);
-            // ---------------------------------
+
             LoadAllTextures(renderer);
-            // 3. CREAMOS AL JUGADOR PRIMERO
-            // Así nos aseguramos de que el renderer existe y se lo pasamos al constructor
+
             int tileSize = baseRoom->getGrid()->getTileSize();
             int colCentro = baseRoom->getGrid()->getCols() / 2;
             int filaCentro = baseRoom->getGrid()->getRows() / 2;
@@ -80,15 +92,17 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
             float spawnX = colCentro * tileSize;
             float spawnY = filaCentro * tileSize;
 
-            player = new Player(spawnX, spawnY, renderer);
+            player = new Player(spawnX, spawnY, renderer, playerTexture);
+
+            MapCoord mapachePos = {colCentro, filaCentro};
+            Mapache *mapacheDePrueba = new Mapache(mapachePos, player, baseRoom, mapacheTexture);
+            enemies.push_back(mapacheDePrueba);
 
             SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
             isRunning = true;
 
-            // 5. CONECTAMOS EL BOTÓN DE DISPARO
             player->setShootCallback([this](float pX, float pY, int mX, int mY, float projectileSpeed, float projectileSize, float range, float damage)
                                      {
-                // IMPORTANTE: Al usar LogicalSize, las coordenadas del ratón ya se escalan solas.
                 float realSpeed = projectileSpeed * 100.0f;
                 float realRange = range * 100.0f;
 
@@ -121,33 +135,79 @@ void Game::handleEvents()
 
 void Game::update(double deltaTime)
 {
-    // Solo actualizamos si tenemos una habitación válida
     if (player && baseRoom)
     {
         checkRoomTransition();
-        // 1. Actualizamos la posición y lógica del jugador contra la grilla de la sala ACTUAL
         player->update(deltaTime, baseRoom->getGrid());
 
-        // 2. Actualizamos la lógica de la sala actual (enemigos, puertas, etc.)
-        baseRoom->update(deltaTime);
+        // --- 1. ACTUALIZAR ENEMIGOS Y DAÑO AL JUGADOR ---
+        SDL_Rect playerRect = player->getDestRect();
 
-        // NOTA: Como usamos SDL_RenderSetLogicalSize, la cámara ya no necesita perseguir al jugador.
-        // SDL ajusta y centra toda la habitación automáticamente en la pantalla.
+        for (auto e : enemies)
+        {
+            e->update(deltaTime, baseRoom->getGrid());
+
+            // Comprobar colisión Jugador vs Mapache
+            SDL_Rect enemyRect = e->getDestRect();
+            if (checkCollisionAABB(playerRect, enemyRect))
+            {
+                // Asumimos que el mapache quita 10 de vida
+                player->takeDamage(10.0f);
+            }
+        }
+
+        baseRoom->update(deltaTime);
         camara.x = 0;
         camara.y = 0;
     }
 
-    // 3. Actualizamos y limpiamos los proyectiles
+    // --- 2. ACTUALIZAR PROYECTILES Y DAÑO A ENEMIGOS ---
     for (int i = 0; i < (int)projectiles.size(); i++)
     {
-        // Los proyectiles chocan contra las paredes de la habitación actual
         projectiles[i]->update(deltaTime, baseRoom->getGrid());
 
+        bool projectileDestroyed = false;
+
+        // Si el proyectil agotó su rango o chocó con una pared
         if (projectiles[i]->isExpired())
+        {
+            projectileDestroyed = true;
+        }
+        else
+        {
+            // Comprobar colisión Proyectil vs Enemigos
+            SDL_Rect projRect = projectiles[i]->getDestRect();
+
+            for (int j = 0; j < (int)enemies.size(); j++)
+            {
+                SDL_Rect enemyRect = enemies[j]->getDestRect();
+
+                if (checkCollisionAABB(projRect, enemyRect))
+                {
+                    // ¡Impacto!
+                    enemies[j]->takeDamage(projectiles[i]->getDamage());
+                    projectileDestroyed = true;
+
+                    // ¿Murió el mapache?
+                    if (enemies[j]->isDead())
+                    {
+                        std::cout << "¡Mapache eliminado!" << std::endl;
+                        delete enemies[j];
+                        enemies.erase(enemies.begin() + j);
+                        j--; // Ajustamos el índice porque el vector se encoge
+                    }
+
+                    break; // Un proyectil solo golpea a un enemigo a la vez
+                }
+            }
+        }
+
+        // Limpiar el proyectil si ha sido destruido
+        if (projectileDestroyed)
         {
             delete projectiles[i];
             projectiles.erase(projectiles.begin() + i);
-            i--;
+            i--; // Ajustamos el índice
         }
     }
 }
@@ -156,23 +216,17 @@ void Game::render()
 {
     SDL_RenderClear(renderer);
 
-    // 1. Dibujamos la habitación en la que estamos (suelo y paredes)
     if (baseRoom)
-    {
         baseRoom->render(renderer, camara);
-    }
 
-    // 2. El Jugador
+    for (auto e : enemies)
+        e->render(renderer, camara);
+
     if (player)
-    {
         player->render(renderer, camara);
-    }
 
-    // 3. Los proyectiles
     for (auto p : projectiles)
-    {
         p->render(renderer, camara);
-    }
 
     SDL_RenderPresent(renderer);
 }
@@ -181,13 +235,14 @@ void Game::clean()
 {
     delete player;
 
-    // Limpiamos TODAS las habitaciones del mapa
+    for (auto e : enemies)
+        delete e;
+    enemies.clear();
+
     for (auto const &pair : rooms)
-    {
-        delete pair.second; // Borra el objeto Room de la memoria
-    }
-    rooms.clear();      // Vacia el std::map
-    baseRoom = nullptr; // Ya fue borrado en el bucle anterior
+        delete pair.second;
+    rooms.clear();
+    baseRoom = nullptr;
 
     for (auto p : projectiles)
         delete p;
@@ -203,19 +258,15 @@ void Game::checkRoomTransition()
     if (!player || !baseRoom)
         return;
 
-    // 1. Calculamos el centro del jugador
     float playerCenterX = player->getX() + (player->getDestRect().w / 2.0f);
     float playerCenterY = player->getY() + (player->getDestRect().h / 2.0f);
 
     Grid *grid = baseRoom->getGrid();
     int tileSize = grid->getTileSize();
 
-    // 2. Sacamos en qué casilla (columna y fila) está parado el jugador
     int playerCol = static_cast<int>(playerCenterX) / tileSize;
     int playerRow = static_cast<int>(playerCenterY) / tileSize;
 
-    // PROTECCIÓN EXTRA: Si el jugador se sale ligeramente de la pantalla, abortamos
-    // para no leer posiciones raras en la matriz y evitar un crash.
     if (playerCol < 0 || playerCol >= grid->getCols() ||
         playerRow < 0 || playerRow >= grid->getRows())
     {
@@ -224,53 +275,40 @@ void Game::checkRoomTransition()
 
     if (weAreInADoor(playerCol, playerRow, grid))
     {
-        // Variables para la nueva sala
         Room *nextRoom = nullptr;
         float newPlayerX = player->getX();
         float newPlayerY = player->getY();
 
-        // 4. Averiguamos qué puerta es y preparamos el salto
-        if (playerRow == 0) // Puerta NORTE (arriba)
+        if (playerRow == 0)
         {
-            // ¡CAMBIO AQUÍ! Usamos baseRoom en lugar de currentRoom
             nextRoom = baseRoom->getTopRoom();
             newPlayerY = (grid->getRows() - 2) * tileSize;
         }
-        else if (playerRow == grid->getRows() - 1) // Puerta SUR (abajo)
+        else if (playerRow == grid->getRows() - 1)
         {
             nextRoom = baseRoom->getBottomRoom();
             newPlayerY = 1 * tileSize;
         }
-        else if (playerCol == 0) // Puerta OESTE (izquierda)
+        else if (playerCol == 0)
         {
             nextRoom = baseRoom->getLeftRoom();
             newPlayerX = (grid->getCols() - 2) * tileSize;
         }
-        else if (playerCol == grid->getCols() - 1) // Puerta ESTE (derecha)
+        else if (playerCol == grid->getCols() - 1)
         {
             nextRoom = baseRoom->getRightRoom();
             newPlayerX = 1 * tileSize;
         }
 
-        // 5. ¡Hacemos el cambio!
-        // Asegurarnos de que nextRoom no sea nulo antes de teletransportarnos
         if (nextRoom != nullptr)
         {
-            baseRoom = nextRoom; // Cambiamos la sala que se dibuja
-
-            // Movemos al jugador a su nueva posición
+            baseRoom = nextRoom;
             player->setX(newPlayerX);
             player->setY(newPlayerY);
 
-            // Borrar los proyectiles al cambiar de sala
             for (auto p : projectiles)
                 delete p;
             projectiles.clear();
-        }
-        else
-        {
-            // (Opcional) Chivato por si cruzas una puerta que no lleva a ningún sitio
-            std::cout << "¡Ups! Esta puerta no lleva a ninguna sala (nextRoom es nullptr)" << std::endl;
         }
     }
 }

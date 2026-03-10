@@ -18,7 +18,7 @@ public:
     // getters/setters
     int getRows() const;
     int getCols() const;
-    int getTileSize() const;
+    static int getTileSize();
     Tile &GetTileAt(int x, int y);
 
 private:

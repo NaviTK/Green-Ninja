@@ -92,4 +92,4 @@ int Grid::getRows() const { return rows; }
 
 int Grid::getCols() const { return cols; }
 
-int Grid::getTileSize() const { return TILE_SIZE; }
+int Grid::getTileSize() { return TILE_SIZE; }

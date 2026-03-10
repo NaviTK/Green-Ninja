@@ -78,7 +78,7 @@ SDL_Rect Projectile::getCollider() const
 }
 
 // --- NUEVO: Para hacer daño al enemigo ---
-int Projectile::getDamage() const
+float Projectile::getDamage() const
 {
     return damage;
 }

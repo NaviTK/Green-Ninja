@@ -23,6 +23,8 @@ set(SOURCES
     src/Grid.cpp
     src/Tile.cpp
     src/Room.cpp
+    src/Mapache.cpp
+    src/Enemy.cpp
 )
 
 # 4. CREAMOS EL EJECUTABLE

@@ -46,5 +46,17 @@
   "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\Room.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\Room.cpp",
   "file": "C:/LarianStudios/Green-Ninja/src/Room.cpp",
   "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/Room.cpp.obj"
+},
+{
+  "directory": "C:/LarianStudios/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\Mapache.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\Mapache.cpp",
+  "file": "C:/LarianStudios/Green-Ninja/src/Mapache.cpp",
+  "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/Mapache.cpp.obj"
+},
+{
+  "directory": "C:/LarianStudios/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\Enemy.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\Enemy.cpp",
+  "file": "C:/LarianStudios/Green-Ninja/src/Enemy.cpp",
+  "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/Enemy.cpp.obj"
 }
 ]

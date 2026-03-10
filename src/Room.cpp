@@ -4,6 +4,7 @@
 
 // --- INICIALIZACIÓN DE VARIABLES ESTÁTICAS ---
 int Room::nextId = 0;
+Mapa Room::cuadriculaMapa;
 
 const std::map<RoomType, std::pair<int, int>> Room::roomSizes = {
     {RoomType::NONE, {0, 0}},
@@ -57,7 +58,7 @@ void Room::setNeighborByDirection(direction dir, Room *neighbor)
 // CONSTRUCTOR Y DESTRUCTOR
 // =========================================================================
 
-Room::Room(RoomType roomType, MapCoord CoordenadasEnLaQuadricula)
+Room::Room(RoomType roomType, MapCoord coordenadasEnLaCuadricula)
 {
     isCleared = (roomType == RoomType::START || roomType == RoomType::GOLDEN);
     id = nextId;
@@ -68,7 +69,7 @@ Room::Room(RoomType roomType, MapCoord CoordenadasEnLaQuadricula)
     int rows = roomSizes.at(roomType).first;
     int cols = roomSizes.at(roomType).second;
     roomGrid = new Grid(rows, cols);
-    coordenadasQuadricula = CoordenadasEnLaQuadricula;
+    coordenadasQuadricula = coordenadasEnLaCuadricula;
 }
 
 Room::~Room()
@@ -83,12 +84,14 @@ Room::~Room()
 
 Room *Room::GenerarNivel(int maxDepth, std::map<int, Room *> &roomsMap, Mapa &cuadricula)
 {
+    cuadriculaMapa = cuadricula;
     // reseteamos los ids para que empiezen en 1(opcional)
     resetContadorIDs();
     // coordenadas de la sala inicial = {centroSala.x,centroSala.y}
     MapCoord startCoord = {maxDepth, maxDepth};
     // creamos sala inicial con coordenadas de la casilla central
     Room *startRoom = new Room(RoomType::START, startCoord);
+
     // asignamos posicion de la habitacion en la quadricula
     cuadricula[startCoord.first][startCoord.second] = startRoom->getId();
     // asignamos ID -> room*
@@ -134,12 +137,15 @@ Room *Room::expandirMapa(int currentDepth, int maxDepth, std::map<int, Room *> &
     directions = {direction::WEST, direction::EAST, direction::NORTH, direction::SOUTH};
     for (auto direccionActual : directions)
     {
-        Room *salaHija = nuevaSala->expandirMapa(currentDepth + 1, maxDepth, roomsMap, cuadricula, direccionActual, AñadirAlExpandir(coordenadasCuadricula, direccionActual));
-
-        if (salaHija)
+        if (direccionActual != Room::getOpposite(direccion))
         {
-            nuevaSala->setNeighborByDirection(direccionActual, salaHija);
-            salaHija->setNeighborByDirection(Room::getOpposite(direccionActual), nuevaSala);
+            Room *salaHija = nuevaSala->expandirMapa(currentDepth + 1, maxDepth, roomsMap, cuadricula, direccionActual, AñadirAlExpandir(coordenadasCuadricula, direccionActual));
+
+            if (salaHija)
+            {
+                nuevaSala->setNeighborByDirection(direccionActual, salaHija);
+                salaHija->setNeighborByDirection(Room::getOpposite(direccionActual), nuevaSala);
+            }
         }
     }
 
