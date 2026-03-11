@@ -2,12 +2,13 @@
 #include <queue>
 #include <map>
 #include <algorithm>
+#include <cmath>
 
 // =========================================================================
 // CONSTRUCTOR
 // =========================================================================
 Enemy::Enemy(MapCoord startPos, Player *playerTarget, Room *hab)
-    : Entity(startPos.first * 64, startPos.second * 64, nullptr) // Asumiendo que tus tiles miden 64. Ajusta esto a tu tamaño real.
+    : Entity(startPos.first * 48, startPos.second * 48, nullptr) // Asumiendo que tus tiles miden 64. Ajusta esto a tu tamaño real.
 {
     habitacion = hab;
     target = playerTarget;
@@ -177,4 +178,202 @@ std::vector<MapCoord> Enemy::calcularCaminoAStar(Grid *grid, MapCoord inicio, Ma
         }
     }
     return camino;
+}
+
+// =========================================================================
+// SISTEMA DE DAÑO Y VIDA
+// =========================================================================
+
+void Enemy::takeDamage(float amount)
+{
+    health -= amount;
+    dmgTimer = 0.25f;
+}
+
+void Enemy::takeDamage(Projectile *proj)
+{
+    health -= proj->getDamage();
+    dmgTimer = 0.25f;
+    aplicarRetroceso(proj);
+}
+
+bool Enemy::isDead() const
+{
+    return health <= 0.0f;
+}
+
+float Enemy::getDamage() const
+{
+    return damage; // Ojo, en tu Mapache la variable se llamaba "dmg", aquí en Enemy la llamaste "damage"
+}
+
+MapCoord Enemy::getCoord() const
+{
+    return currentPos;
+}
+
+// =========================================================================
+// FÍSICAS Y COLISIONES UNIVERSALES
+// =========================================================================
+
+void Enemy::aplicarRetroceso(Projectile *proj)
+{
+    float force = proj->getKnockback();
+
+    SDL_Rect projRect = proj->getDestRect();
+    float projCenterX = projRect.x + projRect.w / 2.0f;
+    float projCenterY = projRect.y + projRect.h / 2.0f;
+
+    float myCenterX = destRect.x + destRect.w / 2.0f;
+    float myCenterY = destRect.y + destRect.h / 2.0f;
+
+    float dirX = myCenterX - projCenterX;
+    float dirY = myCenterY - projCenterY;
+    float dist = std::hypot(dirX, dirY);
+
+    if (dist > 0.0f)
+    {
+        dirX /= dist;
+        dirY /= dist;
+    }
+    else
+    {
+        dirX = 1.0f;
+        dirY = 0.0f;
+    }
+
+    knockbackVX = dirX * force;
+    knockbackVY = dirY * force;
+}
+
+void Enemy::manejarRetroceso(double deltaTime, Grid *grid)
+{
+    int tileSize = grid->getTileSize();
+
+    float marginX = 4.0f;
+    float marginY = 4.0f;
+    float w = destRect.w;
+    float h = destRect.h;
+
+    // MOVIMIENTO EN X
+    float nextX = x + knockbackVX * deltaTime;
+
+    int leftX = static_cast<int>(std::floor((nextX + marginX) / tileSize));
+    int rightX = static_cast<int>(std::floor((nextX + w - marginX) / tileSize));
+    int topY = static_cast<int>(std::floor((y + marginY) / tileSize));
+    int bottomY = static_cast<int>(std::floor((y + h - marginY) / tileSize));
+
+    if (leftX >= 0 && rightX < grid->getCols() && topY >= 0 && bottomY < grid->getRows() &&
+        grid->isWalkable(leftX, topY) && grid->isWalkable(rightX, topY) &&
+        grid->isWalkable(leftX, bottomY) && grid->isWalkable(rightX, bottomY))
+    {
+        x = nextX;
+    }
+    else
+    {
+        knockbackVX = 0.0f;
+    }
+
+    // MOVIMIENTO EN Y
+    float nextY = y + knockbackVY * deltaTime;
+
+    int currentLeftX = static_cast<int>(std::floor((x + marginX) / tileSize));
+    int currentRightX = static_cast<int>(std::floor((x + w - marginX) / tileSize));
+    int nextTopY = static_cast<int>(std::floor((nextY + marginY) / tileSize));
+    int nextBottomY = static_cast<int>(std::floor((nextY + h - marginY) / tileSize));
+
+    if (currentLeftX >= 0 && currentRightX < grid->getCols() && nextTopY >= 0 && nextBottomY < grid->getRows() &&
+        grid->isWalkable(currentLeftX, nextTopY) && grid->isWalkable(currentRightX, nextTopY) &&
+        grid->isWalkable(currentLeftX, nextBottomY) && grid->isWalkable(currentRightX, nextBottomY))
+    {
+        y = nextY;
+    }
+    else
+    {
+        knockbackVY = 0.0f;
+    }
+
+    float friction = 15.0f;
+    knockbackVX -= knockbackVX * friction * deltaTime;
+    knockbackVY -= knockbackVY * friction * deltaTime;
+
+    targetX = x;
+    targetY = y;
+    isMoving = false;
+}
+
+// =========================================================================
+// LÓGICA GRÁFICA UNIVERSAL
+// =========================================================================
+
+void Enemy::actualizarDireccionMirada(float oldX, float oldY)
+{
+    if (x > oldX)
+        oriented = EAST;
+    else if (x < oldX)
+        oriented = WEST;
+    else if (y > oldY)
+        oriented = SOUTH;
+    else if (y < oldY)
+        oriented = NORTH;
+}
+
+void Enemy::animationLogic(double deltaTime)
+{
+    if (dmgTimer > 0.0f)
+    {
+        dmgTimer -= deltaTime;
+
+        if (std::fmod(dmgTimer, 0.1f) > 0.05f)
+        {
+            isTakingDmg = true;
+        }
+        else
+        {
+            isTakingDmg = false;
+        }
+
+        if (dmgTimer <= 0.0f)
+        {
+            isTakingDmg = false;
+            dmgTimer = 0.0f;
+        }
+    }
+
+    if (isMoving)
+    {
+        animTimer += deltaTime;
+        if (animTimer >= TIME_PER_FRAME)
+        {
+            animTimer = 0.0f;
+            currentFrame = (currentFrame + 1) % numFrames;
+        }
+    }
+    else
+    {
+        currentFrame = 0;
+    }
+
+    srcRect.x = frameWidth * currentFrame;
+
+    switch (oriented)
+    {
+    case SOUTH:
+        srcRect.y = frameHeight * 0;
+        break;
+    case NORTH:
+        srcRect.y = frameHeight * 1;
+        break;
+    case WEST:
+        srcRect.y = frameHeight * 2;
+        break;
+    case EAST:
+        srcRect.y = frameHeight * 3;
+        break;
+    }
+
+    if (isTakingDmg)
+    {
+        srcRect.x += TakingDmgOffset;
+    }
 }

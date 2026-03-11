@@ -9,11 +9,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(include)
 
 find_package(SDL2_image REQUIRED)
-# 2. BUSCAMOS SDL2 (Instalado previamente vía pacman)
+# BUSCAMOS SDL2 (Instalado previamente vía pacman)
 find_package(SDL2 REQUIRED)
 
-# 3. LISTADO EXPLÍCITO DE ARCHIVOS FUENTE
-# Esta es la forma recomendada para evitar fallos del "Linker"
+# LISTADO EXPLÍCITO DE ARCHIVOS FUENTE
 set(SOURCES 
     src/main.cpp
     src/Game.cpp
@@ -27,7 +26,7 @@ set(SOURCES
     src/Enemy.cpp
 )
 
-# 4. CREAMOS EL EJECUTABLE
+# CREAMOS EL EJECUTABLE
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # 5. ENLAZAMOS LAS LIBRERÍAS

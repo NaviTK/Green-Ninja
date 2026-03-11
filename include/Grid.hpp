@@ -20,6 +20,7 @@ public:
     int getCols() const;
     static int getTileSize();
     Tile &GetTileAt(int x, int y);
+    bool isWalkable(int x, int y);
 
 private:
     int rows;

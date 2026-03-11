@@ -1,12 +1,15 @@
 #include "Player.hpp"
 #include "Grid.hpp"
 #include <iostream>
-#include <cmath> // Por si acaso para std::abs en shootLogic
+#include <cmath> // Necesario para std::abs y std::fmod
 
 void Player::InicializarStadisticas(float posx, float posy)
 {
-    isTakingDmg = true;     // --- CAMBIADO A FALSE INICIALMENTE ---
-    dmgTimer = 1.0f;        // --- NUEVO: Temporizador para el daño ---
+    knockbackVX = 0.0f;
+    knockbackVY = 0.0f;
+    isTakingDmg = false;
+    dmgTimer = 0.0f;
+    invulnerabilityTime = 2.0f;
     TakingDmgOffset = 64;   // Offset en píxeles en la hoja de sprites
     lastShot = 0;           // contador para volver a disparar
     oriented = SOUTH;       // Inicialmente mirando hacia abajo
@@ -52,6 +55,19 @@ void Player::movementLogic(double deltaTime, Grid *grid)
     float moveX = 0;
     float moveY = 0;
 
+    // --- APLICAR INERCIA DEL KNOCKBACK ANTES DEL MOVIMIENTO NORMAL ---
+    if (std::abs(knockbackVX) > 0.1f || std::abs(knockbackVY) > 0.1f)
+    {
+        moveX += knockbackVX * deltaTime;
+        moveY += knockbackVY * deltaTime;
+
+        // Fricción para que se frene suavemente
+        float friction = 10.0f;
+        knockbackVX -= knockbackVX * friction * deltaTime;
+        knockbackVY -= knockbackVY * friction * deltaTime;
+    }
+    // -------------------------------------------------------------------------
+
     // 2. Calculamos el movimiento Vertical
     if (keystates[SDL_SCANCODE_UP])
     {
@@ -86,7 +102,8 @@ void Player::movementLogic(double deltaTime, Grid *grid)
         x += moveX;
         if (checkCollision(x, y, grid))
         {
-            x = oldX; // Si chocamos en X, deshacemos el movimiento horizontal
+            x = oldX;           // Si chocamos en X, deshacemos el movimiento horizontal
+            knockbackVX = 0.0f; // Matamos la inercia si chocamos contra la pared
         }
     }
 
@@ -96,20 +113,34 @@ void Player::movementLogic(double deltaTime, Grid *grid)
         y += moveY;
         if (checkCollision(x, y, grid))
         {
-            y = oldY; // Si chocamos en Y, deshacemos el movimiento vertical
+            y = oldY;           // Si chocamos en Y, deshacemos el movimiento vertical
+            knockbackVY = 0.0f; // Matamos la inercia si chocamos contra la pared
         }
     }
 }
 
 void Player::animationLogic(double deltaTime)
 {
-    // --- NUEVO: GESTIÓN DEL TEMPORIZADOR DE DAÑO ---
-    if (isTakingDmg)
+    // --- NUEVO: GESTIÓN DE INVULNERABILIDAD Y PARPADEO ---
+    if (dmgTimer > 0.0f)
     {
         dmgTimer -= deltaTime;
+
+        // Efecto retro de parpadeo: Alterna verdadero/falso cada 0.1 segundos
+        if (std::fmod(dmgTimer, 0.2f) > 0.1f)
+        {
+            isTakingDmg = true;
+        }
+        else
+        {
+            isTakingDmg = false;
+        }
+
+        // Cuando se acaba el tiempo, nos aseguramos de apagar el efecto visual
         if (dmgTimer <= 0.0f)
         {
-            isTakingDmg = false; // Se acaba el efecto de recibir daño
+            isTakingDmg = false;
+            dmgTimer = 0.0f;
         }
     }
 
@@ -169,7 +200,7 @@ void Player::animationLogic(double deltaTime)
         break;
     }
 
-    // --- NUEVO: APLICAR OFFSET SI ESTÁ RECIBIENDO DAÑO ---
+    // --- APLICAR OFFSET DE DAÑO SÓLO DURANTE LOS "PICOS" DEL PARPADEO ---
     if (isTakingDmg)
     {
         srcRect.x += TakingDmgOffset;
@@ -316,16 +347,53 @@ bool Player::checkCollision(float nextX, float nextY, Grid *grid)
     return false;
 }
 
-// --- NUEVA FUNCIÓN PARA RECIBIR DAÑO ---
-void Player::takeDamage(float amount)
+// --- FUNCIÓN PARA RECIBIR DAÑO ACTUALIZADA ---
+void Player::takeDamage(float amount, MapCoord source)
 {
-    // Si ya estamos recibiendo daño (i-frames), ignoramos el nuevo golpe
-    if (isTakingDmg)
-        return;
+    // AHORA COMPROBAMOS DIRECTAMENTE EL TEMPORIZADOR PARA LOS I-FRAMES
+    if (dmgTimer > 0.0f)
+        return; // Si el temporizador sigue vivo, ignoramos el golpe
 
     health -= amount;
-    isTakingDmg = true;
-    dmgTimer = 0.5f; // Medio segundo de animación de daño e invulnerabilidad
+    dmgTimer = 1.2f; // --- AHORA TIENES 1.2 SEGUNDOS DE INVULNERABILIDAD ---
 
     std::cout << "Jugador recibe " << amount << " de daño! Vida restante: " << health << std::endl;
+
+    // --- CÁLCULO DEL KNOCKBACK ---
+    int tileSize = 48; // Asumiendo tile 16 x escala 3
+
+    // Centro del jugador
+    float playerCenterX = x + (destRect.w / 2.0f);
+    float playerCenterY = y + (destRect.h / 2.0f);
+
+    // Centro del enemigo
+    float enemyCenterX = (source.first * tileSize) + (tileSize / 2.0f);
+    float enemyCenterY = (source.second * tileSize) + (tileSize / 2.0f);
+
+    // Vector de dirección: Destino (Jugador) - Origen (Enemigo)
+    float dirX = playerCenterX - enemyCenterX;
+    float dirY = playerCenterY - enemyCenterY;
+
+    // Calculamos la distancia (la magnitud del vector)
+    float distance = std::sqrt(dirX * dirX + dirY * dirY);
+
+    // Normalizamos el vector para que mida exactamente 1
+    if (distance > 0.0f)
+    {
+        dirX /= distance;
+        dirY /= distance;
+    }
+    else
+    {
+        // Por seguridad: si por un milagro están en el pixel exacto, empujamos a la derecha
+        dirX = 1.0f;
+        dirY = 0.0f;
+    }
+
+    // 2. Aplicamos la fuerza de empuje
+    float knockbackForce = 500.0f;
+
+    // Guardamos la velocidad de retroceso en el jugador
+    knockbackVX = dirX * knockbackForce;
+    knockbackVY = dirY * knockbackForce;
 }

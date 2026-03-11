@@ -8,11 +8,11 @@ class Grid; // Declaración adelantada para evitar dependencias circulares
 class Projectile : public Entity
 {
 private:
-    float dirX, dirY;       // Vector de dirección normalizado (Hacia dónde va)
-    float speed;            // Velocidad del proyectil (píxeles por segundo)
-    float distanceTraveled; // Cuánto ha viajado (para compararlo con maxRange)
-    float maxRange;         // Alcance máximo antes de desaparecer
-
+    float dirX, dirY;         // Vector de dirección normalizado (Hacia dónde va)
+    float speed;              // Velocidad del proyectil (píxeles por segundo)
+    float distanceTraveled;   // Cuánto ha viajado (para compararlo con maxRange)
+    float maxRange;           // Alcance máximo antes de desaparecer
+    float knockback = 300.0f; // knockBack del projectil
     // --- NUEVOS ATRIBUTOS RECOMENDADOS ---
     double angle; // Ángulo en grados para rotar la textura (que la flecha mire a donde viaja)
     float damage; // Cuánto daño hará al impactar
@@ -35,4 +35,5 @@ public:
     bool isExpired() const;
     SDL_Rect getCollider() const; // Para comprobar choques en Game.cpp
     float getDamage() const;      // Para restarle vida al enemigo
+    float getKnockback() const;
 };

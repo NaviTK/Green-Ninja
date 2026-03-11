@@ -93,3 +93,8 @@ int Grid::getRows() const { return rows; }
 int Grid::getCols() const { return cols; }
 
 int Grid::getTileSize() { return TILE_SIZE; }
+
+bool Grid::isWalkable(int x, int y)
+{
+    return mapData[y][x].isWalkable();
+}

@@ -5,6 +5,7 @@
 #include <functional> // <-- Necesario para std::function (Callbacks)
 
 class Grid;
+typedef std::pair<int, int> MapCoord;
 
 class Player : public Entity
 {
@@ -17,8 +18,11 @@ private:
     float animTimer = 0.0f;
     const float TIME_PER_FRAME = 0.15f; // Cambia de frame cada 0.15 segundos
     bool isTakingDmg;
+    float invulnerabilityTime;
     int TakingDmgOffset;
     float dmgTimer;
+    float knockbackVX;
+    float knockbackVY;
     // Control del estado de ataque
     float attackTimer = 0.0f;
     bool isAttacking = false;
@@ -85,7 +89,7 @@ public:
     void InicializarStadisticas(float x, float y);
 
     // game logic
-    void takeDamage(float amount);
+    void takeDamage(float amount, MapCoord source);
     void gainHealth(float amount);
     void shootProjectile(int mouseX, int mouseY);
     void movementLogic(double deltaTime, Grid *grid);

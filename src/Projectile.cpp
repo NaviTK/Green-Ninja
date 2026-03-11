@@ -89,3 +89,8 @@ void Projectile::setSize(float sizeMultiplier)
     destRect.w = static_cast<int>(16 * sizeMultiplier);
     destRect.h = static_cast<int>(16 * sizeMultiplier);
 }
+
+float Projectile::getKnockback() const
+{
+    return knockback;
+}

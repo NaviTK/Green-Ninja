@@ -151,8 +151,7 @@ void Game::update(double deltaTime)
             SDL_Rect enemyRect = e->getDestRect();
             if (checkCollisionAABB(playerRect, enemyRect))
             {
-                // Asumimos que el mapache quita 10 de vida
-                player->takeDamage(10.0f);
+                player->takeDamage(e->getDamage(), e->getCoord());
             }
         }
 
@@ -184,8 +183,11 @@ void Game::update(double deltaTime)
 
                 if (checkCollisionAABB(projRect, enemyRect))
                 {
-                    // ¡Impacto!
-                    enemies[j]->takeDamage(projectiles[i]->getDamage());
+                    // ¡AQUÍ ESTÁ EL CAMBIO PRINCIPAL!
+                    // En lugar de pasar projectiles[i]->getDamage(),
+                    // le pasamos el puntero al objeto completo.
+                    enemies[j]->takeDamage(projectiles[i]);
+
                     projectileDestroyed = true;
 
                     // ¿Murió el mapache?
@@ -194,10 +196,12 @@ void Game::update(double deltaTime)
                         std::cout << "¡Mapache eliminado!" << std::endl;
                         delete enemies[j];
                         enemies.erase(enemies.begin() + j);
-                        j--; // Ajustamos el índice porque el vector se encoge
+                        // Como borramos el enemigo, decrementamos 'j' para no saltarnos el siguiente
+                        j--;
                     }
 
-                    break; // Un proyectil solo golpea a un enemigo a la vez
+                    // Un proyectil normal se destruye al golpear un solo enemigo
+                    break;
                 }
             }
         }
@@ -207,7 +211,7 @@ void Game::update(double deltaTime)
         {
             delete projectiles[i];
             projectiles.erase(projectiles.begin() + i);
-            i--; // Ajustamos el índice
+            i--; // Ajustamos el índice del bucle de proyectiles
         }
     }
 }

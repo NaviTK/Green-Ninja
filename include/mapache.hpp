@@ -1,52 +1,22 @@
 #pragma once
 #include "Enemy.hpp"
-#include <SDL2/SDL.h> // Necesario para SDL_Texture
+#include <vector>
 
 class Mapache : public Enemy
 {
 private:
-    float health;
+    // Variables exclusivas del Mapache (su cooldown de ataque)
     double attackCooldown;
     double timeSinceLastAttack;
-    float targetX;
-    float targetY;
-    float moveSpeed;
-    // --- VARIABLES DE ANIMACIÓN ---
-    int frameWidth;
-    int frameHeight;
-    float animTimer = 0.0f;
-    const float TIME_PER_FRAME = 0.15f; // Velocidad de la animación
-    int currentFrame = 0;
-    int numFrames = 4; // Suponiendo que tu mapache tiene 4 frames por animación
 
-    enum Direction
-    {
-        SOUTH,
-        NORTH,
-        WEST,
-        EAST
-    } oriented;
-    bool isMoving;
+    // Solo nos quedamos con la función que es el "cerebro" específico del Mapache
+    void actualizarComportamientoNormal(double deltaTime, Grid *grid);
 
 public:
-    // --- CONSTRUCTOR ACTUALIZADO (Añadido SDL_Texture*) ---
     Mapache(MapCoord startPos, Player *playerTarget, Room *hab, SDL_Texture *texturaMapache);
     virtual ~Mapache() = default;
 
-    // --- FUNCIONES ---
-    // (Hemos borrado LoadTexture de aquí)
-    void animationLogic(double deltaTime);
-
+    // Obligados a implementar desde la clase padre
     void update(double deltaTime, Grid *grid) override;
     void attack() override;
-
-    void takeDamage(float amount) override
-    {
-        health -= amount;
-        // Opcional: Aquí podrías añadir un parpadeo en rojo para el mapache
-    }
-    bool isDead() const override
-    {
-        return health <= 0.0f;
-    }
 };
