@@ -1,4 +1,4 @@
-#include "Game.hpp"
+#include "green-ninja/Game.hpp"
 
 Game *game = nullptr;
 
