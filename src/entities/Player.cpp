@@ -1,7 +1,10 @@
 #include "green-ninja/Player.hpp"
 #include "green-ninja/Grid.hpp"
+#include "green-ninja/Projectile.hpp"          // <-- NUEVO: Necesario para conocer la clase Projectile
+#include "green-ninja/ProjectileModifiers.hpp" // <-- NUEVO: Necesario para instanciar los modificadores
 #include <iostream>
-#include <cmath> // Necesario para std::abs y std::fmod
+#include <cmath>     // Necesario para std::abs y std::fmod
+#include <algorithm> // Necesario para std::find
 
 void Player::InicializarStadisticas(float posx, float posy)
 {
@@ -24,12 +27,39 @@ void Player::InicializarStadisticas(float posx, float posy)
     range = 20.0f;          // alcance de los proyectiles (cuanto mayor, más lejos llegan)
 }
 
-void Player::setShootCallback(std::function<void(float, float, int, int, float, float, float, float)> callback)
+// --- MODIFICADO: Ahora devuelve un Projectile* ---
+void Player::setShootCallback(std::function<Projectile *(float, float, int, int, float, float, float, float)> callback)
 {
     onShootCallback = callback;
 }
 
-// --- CONSTRUCTOR CORREGIDO ---
+// --- NUEVO: Añadir un efecto a la lista del jugador ---
+void Player::addEffect(ProjectileEffect effect)
+{
+    activeEffects.push_back(effect);
+}
+
+// --- NUEVO: Aplicar los efectos al proyectil ---
+void Player::applyEffectsToProjectile(Projectile *p)
+{
+    if (!p)
+        return; // Por seguridad
+
+    for (ProjectileEffect effect : activeEffects)
+    {
+        switch (effect)
+        {
+        case ProjectileEffect::BLOOD_TEAR:
+            p->addModifier(std::make_unique<BloodTearModifier>());
+            break;
+        case ProjectileEffect::WIGGLE_WORM:
+            p->addModifier(std::make_unique<WiggleModifier>());
+            break;
+        }
+    }
+}
+
+// --- CONSTRUCTOR ---
 Player::Player(float x, float y, SDL_Renderer *renderer, SDL_Texture *texturaJugador)
     : Entity(x, y, texturaJugador), m_renderer(renderer)
 {
@@ -121,7 +151,7 @@ void Player::movementLogic(double deltaTime, Grid *grid)
 
 void Player::animationLogic(double deltaTime)
 {
-    // --- NUEVO: GESTIÓN DE INVULNERABILIDAD Y PARPADEO ---
+    // --- GESTIÓN DE INVULNERABILIDAD Y PARPADEO ---
     if (dmgTimer > 0.0f)
     {
         dmgTimer -= deltaTime;
@@ -288,8 +318,10 @@ void Player::shootProjectile(int mouseX, int mouseY)
             break;
         }
 
-        // ¡Disparamos desde la nueva posición de la mano!
-        onShootCallback(spawnX, spawnY, mouseX, mouseY, projectileSpeed, projectileSize, range, dmg);
+        // --- CAMBIO PRINCIPAL: Guardamos el puntero, lo creamos y aplicamos efectos ---
+        Projectile *newProj = onShootCallback(spawnX, spawnY, mouseX, mouseY, projectileSpeed, projectileSize, range, dmg);
+
+        applyEffectsToProjectile(newProj);
     }
     else
     {
@@ -347,15 +379,15 @@ bool Player::checkCollision(float nextX, float nextY, Grid *grid)
     return false;
 }
 
-// --- FUNCIÓN PARA RECIBIR DAÑO ACTUALIZADA ---
+// --- FUNCIÓN PARA RECIBIR DAÑO ---
 void Player::takeDamage(float amount, MapCoord source)
 {
-    // AHORA COMPROBAMOS DIRECTAMENTE EL TEMPORIZADOR PARA LOS I-FRAMES
+    // COMPROBAMOS DIRECTAMENTE EL TEMPORIZADOR PARA LOS I-FRAMES
     if (dmgTimer > 0.0f)
         return; // Si el temporizador sigue vivo, ignoramos el golpe
 
     health -= amount;
-    dmgTimer = 1.2f; // --- AHORA TIENES 1.2 SEGUNDOS DE INVULNERABILIDAD ---
+    dmgTimer = 1.2f; // --- TIENES 1.2 SEGUNDOS DE INVULNERABILIDAD ---
 
     std::cout << "Jugador recibe " << amount << " de daño! Vida restante: " << health << std::endl;
 
@@ -396,4 +428,24 @@ void Player::takeDamage(float amount, MapCoord source)
     // Guardamos la velocidad de retroceso en el jugador
     knockbackVX = dirX * knockbackForce;
     knockbackVY = dirY * knockbackForce;
+}
+
+void Player::removeEffect(ProjectileEffect effect)
+{
+    // Buscamos el efecto en nuestra lista de efectos activos
+    auto it = std::find(activeEffects.begin(), activeEffects.end(), effect);
+
+    // Si lo encontramos, lo borramos
+    if (it != activeEffects.end())
+    {
+        activeEffects.erase(it);
+        std::cout << "Efecto eliminado del jugador." << std::endl;
+    }
+}
+
+// --- NUEVO: Limpiar todos los efectos ---
+void Player::clearAllEffects()
+{
+    activeEffects.clear();
+    std::cout << "Todos los efectos han sido eliminados." << std::endl;
 }

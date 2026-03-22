@@ -4,10 +4,11 @@
 #include "green-ninja/Projectile.hpp"
 #include "green-ninja/RoomType.hpp"
 #include "green-ninja/Mapache.hpp"
+#include "green-ninja/ProjectileModifiers.hpp"
 #include <string>
 #include <iostream>
-
-// --- NUEVO: FUNCIÓN MATEMÁTICA DE COLISIÓN (AABB) ---
+#include <cmath>
+// --- FUNCIÓN MATEMÁTICA DE COLISIÓN (AABB) ---
 static bool checkCollisionAABB(const SDL_Rect &a, const SDL_Rect &b)
 {
     return (a.x < b.x + b.w &&
@@ -101,7 +102,9 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
             SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
             isRunning = true;
 
-            player->setShootCallback([this](float pX, float pY, int mX, int mY, float projectileSpeed, float projectileSize, float range, float damage)
+            // --- AQUÍ ESTÁ EL CALLBACK MODIFICADO ---
+            // Ahora devuelve un Projectile* en lugar de void
+            player->setShootCallback([this](float pX, float pY, int mX, int mY, float projectileSpeed, float projectileSize, float range, float damage) -> Projectile *
                                      {
                 float realSpeed = projectileSpeed * 100.0f;
                 float realRange = range * 100.0f;
@@ -109,7 +112,15 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height, bo
                 Projectile* p = new Projectile(pX, pY, mX, mY, this->projectileTexture, realSpeed, realRange, damage);
                 p->setSize(projectileSize);
                 
-                this->projectiles.push_back(p); });
+                // Lo guardamos en el Game para que se renderice y actualice físicamente
+                this->projectiles.push_back(p); 
+
+                // LO DEVOLVEMOS para que el Player pueda inyectarle sus modificadores actuales
+                return p; });
+
+            // prueba de efectos
+            // player->addEffect(ProjectileEffect::BLOOD_TEAR);
+            // player->addEffect(ProjectileEffect::WIGGLE_WORM);
 
             return true;
         }
@@ -183,9 +194,7 @@ void Game::update(double deltaTime)
 
                 if (checkCollisionAABB(projRect, enemyRect))
                 {
-                    // ¡AQUÍ ESTÁ EL CAMBIO PRINCIPAL!
-                    // En lugar de pasar projectiles[i]->getDamage(),
-                    // le pasamos el puntero al objeto completo.
+                    // En lugar de pasar daño bruto, le pasamos el puntero al proyectil completo.
                     enemies[j]->takeDamage(projectiles[i]);
 
                     projectileDestroyed = true;
@@ -218,6 +227,10 @@ void Game::update(double deltaTime)
 
 void Game::render()
 {
+    // --- NUEVO: Ponemos el "pincel" en color Negro antes de limpiar ---
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+    // Limpiamos la pantalla (ahora se pintará de negro)
     SDL_RenderClear(renderer);
 
     if (baseRoom)
@@ -232,7 +245,130 @@ void Game::render()
     for (auto p : projectiles)
         p->render(renderer, camara);
 
+    // Dibujamos la interfaz al final (que volverá a cambiar colores si lo necesita)
+    renderHUD();
+
     SDL_RenderPresent(renderer);
+}
+
+void Game::renderHUD()
+{
+    if (!player)
+        return;
+
+    // VIDA E ÍTEMS(items aun no hay)
+    int margin = 20;
+    int heartSize = 30;
+    int spacing = 5;
+
+    int heartsToDraw = static_cast<int>(player->getHealth()) / 20;
+
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    for (int i = 0; i < heartsToDraw; i++)
+    {
+        SDL_Rect heartRect = {margin + (i * (heartSize + spacing)), margin, heartSize, heartSize};
+        SDL_RenderFillRect(renderer, &heartRect);
+    }
+
+    // MINIMAPA LIMITADO (Distancia <= 2)
+    int miniMapTileSize = 24;
+    int mapMarginTop = 60;
+    int mapMarginRight = 60;
+
+    int logicalW, logicalH;
+    SDL_RenderGetLogicalSize(renderer, &logicalW, &logicalH);
+
+    // Encontrar la posición [x][y] de la habitación actual
+    int currentX = -1, currentY = -1;
+    for (size_t x = 0; x < mapa.size(); x++)
+    {
+        for (size_t y = 0; y < mapa[x].size(); y++)
+        {
+            int roomId = mapa[x][y];
+            if (roomId != -1 && rooms.find(roomId) != rooms.end() && rooms[roomId] == baseRoom)
+            {
+                currentX = x;
+                currentY = y;
+                break;
+            }
+        }
+        if (currentX != -1)
+            break;
+    }
+
+    int uiCenterX = logicalW - mapMarginRight;
+    int uiCenterY = mapMarginTop;
+
+    // 3. Dibujar SOLO las habitaciones que están a distancia <= 2
+    if (currentX != -1 && currentY != -1)
+    {
+        for (size_t x = 0; x < mapa.size(); x++)
+        {
+            for (size_t y = 0; y < mapa[x].size(); y++)
+            {
+                int roomId = mapa[x][y];
+                if (roomId != -1 && rooms.find(roomId) != rooms.end())
+                {
+                    int diffX = static_cast<int>(x) - currentX;
+                    int diffY = static_cast<int>(y) - currentY;
+
+                    if (std::abs(diffX) <= 2 && std::abs(diffY) <= 2)
+                    {
+                        Room *roomToDraw = rooms[roomId];
+
+                        SDL_Rect miniRoom = {
+                            uiCenterX + (diffX * miniMapTileSize) - (miniMapTileSize / 2),
+                            uiCenterY + (diffY * miniMapTileSize) - (miniMapTileSize / 2),
+                            miniMapTileSize,
+                            miniMapTileSize};
+
+                        // Colores por tipo de habitación
+                        RoomType type = roomToDraw->getType();
+                        if (type == RoomType::START)
+                            SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+                        else if (type == RoomType::BOSS)
+                            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                        else
+                            SDL_SetRenderDrawColor(renderer, 150, 150, 150, 255);
+
+                        SDL_RenderFillRect(renderer, &miniRoom);
+
+                        // Bordes y jugador
+                        if (roomToDraw == baseRoom)
+                        {
+                            SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+                            SDL_RenderDrawRect(renderer, &miniRoom);
+
+                            Grid *grid = baseRoom->getGrid();
+                            float roomPixelW = grid->getCols() * grid->getTileSize();
+                            float roomPixelH = grid->getRows() * grid->getTileSize();
+
+                            float pCX = player->getX() + (player->getDestRect().w / 2.0f);
+                            float pCY = player->getY() + (player->getDestRect().h / 2.0f);
+
+                            float pctX = pCX / roomPixelW;
+                            float pctY = pCY / roomPixelH;
+
+                            int dotSize = 4;
+                            SDL_Rect playerDot = {
+                                miniRoom.x + static_cast<int>(pctX * miniRoom.w) - (dotSize / 2),
+                                miniRoom.y + static_cast<int>(pctY * miniRoom.h) - (dotSize / 2),
+                                dotSize,
+                                dotSize};
+
+                            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+                            SDL_RenderFillRect(renderer, &playerDot);
+                        }
+                        else
+                        {
+                            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                            SDL_RenderDrawRect(renderer, &miniRoom);
+                        }
+                    } // Fin del if de distancia
+                }
+            }
+        }
+    }
 }
 
 void Game::clean()

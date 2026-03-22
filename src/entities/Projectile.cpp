@@ -2,15 +2,14 @@
 #include "green-ninja/Grid.hpp"
 #include <cmath>
 
-// En algunos compiladores de Windows, M_PI no viene por defecto a menos que lo definas
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
 
-// Añadimos el parámetro 'dmg' al final
 Projectile::Projectile(float x, float y, float targetX, float targetY, SDL_Texture *tex, float spd, float rng, int dmg)
     : Entity(x, y, tex), speed(spd), maxRange(rng), distanceTraveled(0), damage(dmg)
 {
+    // ... (Tu código actual del constructor se queda exactamente igual) ...
     float deltaX = targetX - x;
     float deltaY = targetY - y;
     float distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -19,41 +18,60 @@ Projectile::Projectile(float x, float y, float targetX, float targetY, SDL_Textu
     {
         dirX = deltaX / distance;
         dirY = deltaY / distance;
-
-        // atan2 nos da el ángulo en radianes. Lo multiplicamos para pasarlo a grados.
         angle = std::atan2(deltaY, deltaX) * (180.0 / M_PI);
     }
     else
     {
         dirX = 0;
-        dirY = -1;     // Dispara hacia arriba por defecto
-        angle = -90.0; // Ángulo mirando hacia arriba
+        dirY = -1;
+        angle = -90.0;
     }
-
     srcRect = {0, 0, 32, 32};
     destRect.w = 16;
     destRect.h = 16;
-
-    // Inicializamos la posición visual desde el primer frame
     destRect.x = static_cast<int>(x);
     destRect.y = static_cast<int>(y);
+}
+
+// --- NUEVO: Setter de dirección para corregir el ángulo si un modificador cambia el rumbo ---
+void Projectile::setDirection(float dx, float dy)
+{
+    dirX = dx;
+    dirY = dy;
+    angle = std::atan2(dirY, dirX) * (180.0 / M_PI);
+}
+
+void Projectile::setColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+{
+    color = {r, g, b, a};
+}
+
+void Projectile::addModifier(std::unique_ptr<ProjectileModifier> mod)
+{
+    mod->onInit(this); // Aplica efectos iniciales al añadirlo
+    modifiers.push_back(std::move(mod));
 }
 
 void Projectile::update(double deltaTime, Grid *grid)
 {
-    // 1. Mover la posición lógica
+    // 1. Ejecutar modificadores (pueden cambiar dirX, dirY, etc.)
+    for (auto &mod : modifiers)
+    {
+        mod->update(this, deltaTime);
+    }
+
+    // 2. Mover la posición lógica
     x += dirX * speed * deltaTime;
     y += dirY * speed * deltaTime;
 
-    // 2. Actualizar el rectángulo de dibujo
+    // 3. Actualizar el rectángulo de dibujo
     destRect.x = static_cast<int>(x);
     destRect.y = static_cast<int>(y);
 
     distanceTraveled += speed * deltaTime;
-    angle += 360.0 * deltaTime; // Rota 360 grados por segundo (ajusta esto para cambiar la velocidad de rotación)
+    // Quitamos el angle += 360 porque ahora el ángulo se ajusta a la dirección real de vuelo.
 }
 
-// --- NUEVO: Sobrescribimos el render para poder rotar la textura ---
 void Projectile::render(SDL_Renderer *renderer, const SDL_Rect &camera)
 {
     SDL_Rect renderRect = {
@@ -62,7 +80,15 @@ void Projectile::render(SDL_Renderer *renderer, const SDL_Rect &camera)
         destRect.w,
         destRect.h};
 
+    // Aplicar el color y luego dibujar
+    SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
+    SDL_SetTextureAlphaMod(texture, color.a);
+
     TextureManager::DrawRotated(texture, srcRect, renderRect, angle, renderer);
+
+    // Restaurar el color a blanco por si la textura se usa en otro lado
+    SDL_SetTextureColorMod(texture, 255, 255, 255);
+    SDL_SetTextureAlphaMod(texture, 255);
 }
 
 bool Projectile::isExpired() const

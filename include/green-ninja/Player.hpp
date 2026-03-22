@@ -2,10 +2,21 @@
 #include "green-ninja/Entity.hpp"
 #include <string>
 #include <map>
+#include <vector>     // <-- NUEVO: Para la lista de efectos
 #include <functional> // <-- Necesario para std::function (Callbacks)
 
 class Grid;
+class Projectile; // <-- NUEVO: Declaración adelantada para poder devolver punteros
+
 typedef std::pair<int, int> MapCoord;
+
+// --- NUEVO: Enum con todos los posibles modificadores ---
+enum class ProjectileEffect
+{
+    BLOOD_TEAR,
+    WIGGLE_WORM
+    // Aquí podrás añadir más en el futuro: HOMING, GIANT, EXPLOSIVE...
+};
 
 class Player : public Entity
 {
@@ -69,8 +80,11 @@ private:
     // projectiles
     uint32_t lastShot;
 
-    // El "botón" de disparo.
-    std::function<void(float, float, int, int, float, float, float, float)> onShootCallback;
+    // --- NUEVO: Lista donde guardaremos los modificadores activos ---
+    std::vector<ProjectileEffect> activeEffects;
+
+    // --- MODIFICADO: Ahora el callback devuelve un Projectile* en lugar de void ---
+    std::function<Projectile *(float, float, int, int, float, float, float, float)> onShootCallback;
 
 public:
     // --- CONSTRUCTOR ACTUALIZADO (Añadido SDL_Texture*) ---
@@ -79,8 +93,14 @@ public:
     // Destructor
     ~Player() override = default;
 
-    // Método para que el Gestor (Game) enchufe la función de crear proyectiles
-    void setShootCallback(std::function<void(float, float, int, int, float, float, float, float)> callback);
+    // --- MODIFICADO: Actualizamos la firma de la función para devolver Projectile* ---
+    void setShootCallback(std::function<Projectile *(float, float, int, int, float, float, float, float)> callback);
+
+    // Modificadores de projectil
+    void addEffect(ProjectileEffect effect);
+    void applyEffectsToProjectile(Projectile *p);
+    void removeEffect(ProjectileEffect effect);
+    void clearAllEffects();
 
     // Métodos sobreescritos
     void update(double deltaTime, Grid *grid) override;
@@ -102,4 +122,6 @@ public:
     void setY(int newY) { y = newY; }
     int getX() { return x; };
     int getY() { return y; };
+    float getHealth() { return health; }
+    void setHealth(float newHealth) { health = newHealth; }
 };

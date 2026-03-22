@@ -21,6 +21,7 @@ set(SOURCES
     src/core/TextureManager.cpp
     src/entities/Player.cpp
     src/entities/Projectile.cpp
+    src/entities/ProjectileModifiers.cpp
     src/entities/enemies/Enemy.cpp
     src/entities/enemies/mapache.cpp
     src/world/Grid.cpp

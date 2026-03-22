@@ -94,6 +94,15 @@ build CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj: CXX_C
   OBJECT_FILE_DIR = CMakeFiles\ElementalGridTactics.dir\src\entities
   TARGET_SUPPORT_DIR = CMakeFiles\ElementalGridTactics.dir
 
+build CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj: CXX_COMPILER__ElementalGridTactics_unscanned_Debug C$:/LarianStudios/Green-Ninja/src/entities/ProjectileModifiers.cpp || cmake_object_order_depends_target_ElementalGridTactics
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\ElementalGridTactics.dir\src\entities\ProjectileModifiers.cpp.obj.d
+  FLAGS = -g -std=gnu++17
+  INCLUDES = -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2
+  OBJECT_DIR = CMakeFiles\ElementalGridTactics.dir
+  OBJECT_FILE_DIR = CMakeFiles\ElementalGridTactics.dir\src\entities
+  TARGET_SUPPORT_DIR = CMakeFiles\ElementalGridTactics.dir
+
 build CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.obj: CXX_COMPILER__ElementalGridTactics_unscanned_Debug C$:/LarianStudios/Green-Ninja/src/entities/enemies/Enemy.cpp || cmake_object_order_depends_target_ElementalGridTactics
   CONFIG = Debug
   DEP_FILE = CMakeFiles\ElementalGridTactics.dir\src\entities\enemies\Enemy.cpp.obj.d
@@ -147,7 +156,7 @@ build CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.obj: CXX_COMPILER__
 #############################################
 # Link the executable ElementalGridTactics.exe
 
-build ElementalGridTactics.exe: CXX_EXECUTABLE_LINKER__ElementalGridTactics_Debug CMakeFiles/ElementalGridTactics.dir/src/Main.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/core/Game.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/core/TextureManager.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/mapache.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/world/Room.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.obj | C$:/msys64/ucrt64/lib/libSDL2main.a C$:/msys64/ucrt64/lib/libSDL2.dll.a C$:/msys64/ucrt64/lib/libSDL2_image.dll.a
+build ElementalGridTactics.exe: CXX_EXECUTABLE_LINKER__ElementalGridTactics_Debug CMakeFiles/ElementalGridTactics.dir/src/Main.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/core/Game.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/core/TextureManager.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/mapache.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/world/Room.cpp.obj CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.obj | C$:/msys64/ucrt64/lib/libSDL2main.a C$:/msys64/ucrt64/lib/libSDL2.dll.a C$:/msys64/ucrt64/lib/libSDL2_image.dll.a
   CONFIG = Debug
   FLAGS = -g
   LINK_LIBRARIES = C:/msys64/ucrt64/lib/libSDL2main.a  C:/msys64/ucrt64/lib/libSDL2.dll.a  C:/msys64/ucrt64/lib/libSDL2_image.dll.a  -lshell32  -Wl,--undefined=WinMain  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32

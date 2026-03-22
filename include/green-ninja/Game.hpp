@@ -21,6 +21,7 @@ public:
     bool init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
     void handleEvents();
     void update(double deltaTime);
+    void renderHUD();
     void render();
     void clean();
     void LoadAllTextures(SDL_Renderer *renderer);
