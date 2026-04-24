@@ -241,11 +241,17 @@ void Player::shootLogic()
 {
     if (!m_renderer)
         return; // Programación defensiva
-
+    // para testear modificadores de projectil
+    const Uint8 *currentKeyStates = SDL_GetKeyboardState(NULL);
+    if (currentKeyStates[SDL_SCANCODE_M])
+    {
+        addEffect(ProjectileEffect::BLOOD_TEAR);
+        addEffect(ProjectileEffect::WIGGLE_WORM);
+    }
+    // fin test de modificadores de projectil
     int winMouseX, winMouseY; // Coordenadas físicas de la ventana
     uint32_t currentTick = SDL_GetTicks();
     Uint32 mouseState = SDL_GetMouseState(&winMouseX, &winMouseY);
-
     // Comprobamos si disparamos ANTES de hacer cálculos caros
     if ((mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) && (currentTick - lastShot > 1000 / attackSpeed))
     {
@@ -369,10 +375,9 @@ bool Player::checkCollision(float nextX, float nextY, Grid *grid)
     {
         for (int j = leftTile; j <= rightTile; j++)
         {
-            if (grid->GetTileAt(j, i).hasType(TileType::WALL))
-            {
+            if (grid->GetTileAt(j, i).hasType(TileType::WALL) || grid->GetTileAt(j, i).hasType(TileType::ROCK1) ||
+                grid->GetTileAt(j, i).hasType(TileType::ROCK2) || grid->GetTileAt(j, i).hasType(TileType::FOSA))
                 return true;
-            }
         }
     }
 

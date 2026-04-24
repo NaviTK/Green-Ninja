@@ -29,8 +29,28 @@ public:
     void checkRoomTransition();
     bool weAreInADoor(int col, int row, Grid *grid);
     static const int projectileLimit = 500; // Límite de proyectiles en pantalla para evitar saturación
+
 private:
     void Inicialize(int width, int height);
+
+private:
+    // --- NUEVAS MINIFUNCIONES DE INICIALIZACIÓN ---
+    bool initSDL(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
+    void initGameWorld();
+
+    // --- NUEVAS MINIFUNCIONES DE ACTUALIZACIÓN ---
+    void updateEntities(double deltaTime);
+    void updateProjectiles(double deltaTime);
+    void checkCollisions();
+    void checkRoomCleared();
+
+    // --- NUEVAS MINIFUNCIONES DE RENDERIZADO ---
+    void renderHealth();
+    void renderMinimap();
+
+    // --- NUEVAS MINIFUNCIONES DE TRANSICIÓN DE SALA ---
+    void clearRoomEntities();
+    void spawnRoomEnemies();
     bool isRunning;
     // window and renderer
     SDL_Window *window;
@@ -50,7 +70,7 @@ private:
     // World
     std::map<int, Room *> rooms; // Mapa de habitaciones (id -> Room*)
     Room *currentRoom;           // La habitación actual en la que nos encontramos (inicialmente será la baseRoom)
-    Room *baseRoom;              // La habitación raíz del mapa, desde la que se generarán todas las demás (START)
+    Room *baseRoom;              // La habitación raíz del mapa, desde la que se generarán todas las demás (START). NOTA: También la usas como currentRoom.
     int depth = 5;               // limite de profundidad de creacion de habitaciones(distancia a la que esta el BOSS)
     Mapa mapa;
 };

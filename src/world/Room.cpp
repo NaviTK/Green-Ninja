@@ -1,6 +1,8 @@
 #include "green-ninja/Room.hpp"
 #include <list>
 #include <iostream>
+#include <fstream>
+#include <string>
 
 // --- INICIALIZACIÓN DE VARIABLES ESTÁTICAS ---
 int Room::nextId = 0;
@@ -70,6 +72,9 @@ Room::Room(RoomType roomType, MapCoord coordenadasEnLaCuadricula)
     int cols = roomSizes.at(roomType).second;
     roomGrid = new Grid(rows, cols);
     coordenadasQuadricula = coordenadasEnLaCuadricula;
+    // LAYOUTS
+    if (type == RoomType::NORMAL)
+        cargarLayoutNormalAleatorio();
 }
 
 Room::~Room()
@@ -280,4 +285,69 @@ void Room::render(SDL_Renderer *renderer, const SDL_Rect &camera)
     {
         roomGrid->DrawGrid(renderer, camera);
     }
+}
+
+void Room::cargarLayoutNormalAleatorio()
+{
+    std::vector<std::string> layouts = {
+        "../assets/Rooms/NormalRooms/NormalRoom1.txt",
+        "../assets/Rooms/NormalRooms/NormalRoom2.txt",
+        "../assets/Rooms/NormalRooms/NormalRoom3.txt"};
+
+    // 2. Elegimos una al azar
+    int index = rand() % layouts.size();
+    std::ifstream archivo(layouts[index]);
+
+    if (!archivo.is_open())
+    {
+        std::cerr << "Error: No se pudo abrir el layout " << layouts[index] << std::endl;
+        return; // Si falla, se queda el Grid vacío por defecto
+    }
+
+    std::string linea;
+    int fila = 0;
+
+    // 3. Leemos y transformamos las letras en Tiles
+    while (std::getline(archivo, linea) && fila < roomGrid->getRows())
+    {
+        int columnaLogica = 0;
+        for (int i = 0; i < linea.length(); i++)
+        {
+            char c = linea[i];
+
+            if (c == ' ')
+                continue; // Ignorar espacios
+
+            if (columnaLogica >= roomGrid->getCols())
+                break; // Seguridad extra
+
+            Tile &tileActual = roomGrid->GetTileAt(columnaLogica, fila);
+
+            switch (c)
+            {
+            case 'w': // WALL
+                tileActual.setType(TileType::WALL);
+                break;
+            case 'r': // ROCK
+                tileActual.setType(TileType::ROCK1);
+                break;
+            // Si no tienes FOSA en tu TileType, cámbialo a WALL temporalmente o añádelo a tu enum
+            case 'f': // FOSA
+                tileActual.setType(TileType::FOSA);
+                break;
+            case 'm': // MAPACHE
+                // Guardamos al mapache y ponemos suelo
+                spawnsEnemigos.push_back({columnaLogica, fila, 'm'});
+                tileActual.setType(TileType::FLOOR1);
+                break;
+            case '.':
+            default:
+                tileActual.setType(TileType::FLOOR1);
+                break;
+            }
+            columnaLogica++;
+        }
+        fila++;
+    }
+    archivo.close();
 }

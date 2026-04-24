@@ -162,6 +162,19 @@ std::vector<MapCoord> Enemy::calcularCaminoAStar(Grid *grid, MapCoord inicio, Ma
                 if (!pos_ok(vecino, *sala) || !sala->GetTileAt(vecino.first, vecino.second).isWalkable())
                     continue;
 
+                // --- NUEVO: PREVENIR CORTES DE ESQUINA EN DIAGONALES ---
+                if (dir.dx != 0 && dir.dy != 0)
+                {
+                    bool adyacenteX_ok = sala->GetTileAt(nodoActual.first + dir.dx, nodoActual.second).isWalkable();
+                    bool adyacenteY_ok = sala->GetTileAt(nodoActual.first, nodoActual.second + dir.dy).isWalkable();
+
+                    if (!adyacenteX_ok || !adyacenteY_ok)
+                    {
+                        continue;
+                    }
+                }
+                // --------------------------------------------------------
+
                 // Calculamos cuánto costaría llegar a este vecino pasando por el nodoActual
                 int tentative_g = g_score[nodoActual.second][nodoActual.first] + dir.costo;
 

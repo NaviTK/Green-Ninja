@@ -3,7 +3,7 @@
 #include <vector>
 #include <map>
 #include "green-ninja/Tile.hpp"
-
+#include "green-ninja/Tiletype.hpp"
 // Definimos el alias para la matriz de Tiles
 using TileMatrix = std::vector<std::vector<Tile>>;
 
@@ -26,7 +26,7 @@ private:
     int rows;
     int cols;
     static const int TILE_SIZE = 48;
-
+    TileType Lvlfloor = TileType::FLOOR1;
     // Nuestra matriz dinámica
     TileMatrix mapData;
 

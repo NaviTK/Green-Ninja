@@ -24,6 +24,7 @@ set(SOURCES
     src/entities/ProjectileModifiers.cpp
     src/entities/enemies/Enemy.cpp
     src/entities/enemies/mapache.cpp
+    src/entities/enemies/bat.cpp
     src/world/Grid.cpp
     src/world/Room.cpp
     src/world/Tile.cpp

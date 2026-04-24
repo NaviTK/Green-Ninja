@@ -5,10 +5,17 @@ floor3=../assets/OtrosSprites/floor3.png
 mapache=../assets/OtrosSprites/mapache.png
 murcielago=../assets/OtrosSprites/murcielago.png
 projectile=../assets/MisSprites/projectile.png
+
 rightDoor=../assets/MisSprites/rightDoor.png
 leftDoor=../assets/MisSprites/leftDoor.png
 bottomDoor=../assets/MisSprites/bottomDoor.png
 topDoor=../assets/MisSprites/topDoor.png
+
+rightDoorClosed=../assets/MisSprites/rightDoor.png
+leftDoorClosed=../assets/MisSprites/leftDoor.png
+bottomDoorClosed=../assets/MisSprites/bottomDoor.png
+topDoorClosed=../assets/MisSprites/topDoor.png
+
 barril=../assets/MisSprites/barril.png
 fosa=../assets/MisSprites/fosa.png
 puente=../assets/MisSprites/puente.png

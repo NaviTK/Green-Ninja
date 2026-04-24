@@ -1,0 +1,9 @@
+w w w w w w w w w w w w w w w
+w . . . r r . . . r r m . . w
+w . f . . . . . . . . . f . w
+w . f . r . . . . . r . f . w
+w . . . r . . m . . r . . . w
+w . f . r . . . . . r . f . w
+w . f . . . . . . . . . f . w
+w . . m r r . . . r r . . . w
+w w w w w w w w w w w w w w w

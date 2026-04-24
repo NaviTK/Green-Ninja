@@ -8,6 +8,11 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+
+// ============================================================================
+// FUNCIONES AUXILIARES
+// ============================================================================
+
 // --- FUNCIÓN MATEMÁTICA DE COLISIÓN (AABB) ---
 static bool checkCollisionAABB(const SDL_Rect &a, const SDL_Rect &b)
 {
@@ -17,11 +22,14 @@ static bool checkCollisionAABB(const SDL_Rect &a, const SDL_Rect &b)
             a.y + a.h > b.y);
 }
 
-Game::Game() : window(nullptr), renderer(nullptr), isRunning(false), player(nullptr), baseRoom(nullptr) {}
+// ============================================================================
+// CONSTRUCTOR Y DESTRUCTOR
+// ============================================================================
+
+Game::Game() : window(nullptr), renderer(nullptr), isRunning(false), player(nullptr), currentRoom(nullptr), baseRoom(nullptr) {}
 
 Game::~Game()
 {
-    // destruimos texturas
     if (playerTexture)
         SDL_DestroyTexture(playerTexture);
     if (mapacheTexture)
@@ -30,12 +38,79 @@ Game::~Game()
         SDL_DestroyTexture(projectileTexture);
 }
 
+// ============================================================================
+// INICIALIZACIÓN
+// ============================================================================
+
+bool Game::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
+{
+    Inicialize(width, height);
+
+    if (!initSDL(title, xpos, ypos, width, height, fullscreen))
+        return false;
+
+    initGameWorld();
+    return true;
+}
+
+bool Game::initSDL(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
+{
+    int flags = 0;
+    if (fullscreen)
+        flags = SDL_WINDOW_FULLSCREEN;
+
+    if (SDL_Init(SDL_INIT_VIDEO) == 0)
+    {
+        window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        if (renderer)
+            return true;
+    }
+    return false;
+}
+
 void Game::Inicialize(int width, int height)
 {
     windowWidht = width;
     windowHeight = height;
     camara = {0, 0, windowWidht, windowHeight};
     mapa = Mapa(2 * depth + 1, std::vector<int>(2 * depth + 1, -1));
+}
+
+void Game::initGameWorld()
+{
+    baseRoom = Room::GenerarNivel(depth, rooms, mapa);
+    currentRoom = baseRoom;
+
+    int roomPixelWidth = currentRoom->getGrid()->getCols() * currentRoom->getGrid()->getTileSize();
+    int roomPixelHeight = currentRoom->getGrid()->getRows() * currentRoom->getGrid()->getTileSize();
+
+    SDL_RenderSetLogicalSize(renderer, roomPixelWidth, roomPixelHeight);
+
+    LoadAllTextures(renderer);
+
+    int tileSize = currentRoom->getGrid()->getTileSize();
+    int colCentro = currentRoom->getGrid()->getCols() / 2;
+    int filaCentro = currentRoom->getGrid()->getRows() / 2;
+
+    float spawnX = colCentro * tileSize;
+    float spawnY = filaCentro * tileSize;
+
+    player = new Player(spawnX, spawnY, renderer, playerTexture);
+
+    SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+    isRunning = true;
+
+    player->setShootCallback([this](float pX, float pY, int mX, int mY, float projectileSpeed, float projectileSize, float range, float damage) -> Projectile *
+                             {
+        float realSpeed = projectileSpeed * 100.0f;
+        float realRange = range * 100.0f;
+
+        Projectile* p = new Projectile(pX, pY, mX, mY, this->projectileTexture, realSpeed, realRange, damage);
+        p->setSize(projectileSize);
+        
+        this->projectiles.push_back(p); 
+        return p; });
 }
 
 void Game::LoadAllTextures(SDL_Renderer *renderer)
@@ -50,10 +125,10 @@ void Game::LoadAllTextures(SDL_Renderer *renderer)
     {
         for (auto const &pair : rooms)
         {
-            Room *currentRoom = pair.second;
-            if (currentRoom && currentRoom->getGrid())
+            Room *room = pair.second;
+            if (room && room->getGrid())
             {
-                currentRoom->getGrid()->loadTextures(renderer, spritePaths);
+                room->getGrid()->loadTextures(renderer, spritePaths);
             }
         }
     }
@@ -63,70 +138,9 @@ void Game::LoadAllTextures(SDL_Renderer *renderer)
     }
 }
 
-bool Game::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
-{
-    Inicialize(width, height);
-    int flags = 0;
-    if (fullscreen)
-        flags = SDL_WINDOW_FULLSCREEN;
-
-    if (SDL_Init(SDL_INIT_VIDEO) == 0)
-    {
-        window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
-        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-        if (renderer)
-        {
-            baseRoom = Room::GenerarNivel(depth, rooms, mapa);
-
-            int roomPixelWidth = baseRoom->getGrid()->getCols() * baseRoom->getGrid()->getTileSize();
-            int roomPixelHeight = baseRoom->getGrid()->getRows() * baseRoom->getGrid()->getTileSize();
-
-            SDL_RenderSetLogicalSize(renderer, roomPixelWidth, roomPixelHeight);
-
-            LoadAllTextures(renderer);
-
-            int tileSize = baseRoom->getGrid()->getTileSize();
-            int colCentro = baseRoom->getGrid()->getCols() / 2;
-            int filaCentro = baseRoom->getGrid()->getRows() / 2;
-
-            float spawnX = colCentro * tileSize;
-            float spawnY = filaCentro * tileSize;
-
-            player = new Player(spawnX, spawnY, renderer, playerTexture);
-
-            MapCoord mapachePos = {colCentro, filaCentro};
-            Mapache *mapacheDePrueba = new Mapache(mapachePos, player, baseRoom, mapacheTexture);
-            enemies.push_back(mapacheDePrueba);
-
-            SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
-            isRunning = true;
-
-            // --- AQUÍ ESTÁ EL CALLBACK MODIFICADO ---
-            // Ahora devuelve un Projectile* en lugar de void
-            player->setShootCallback([this](float pX, float pY, int mX, int mY, float projectileSpeed, float projectileSize, float range, float damage) -> Projectile *
-                                     {
-                float realSpeed = projectileSpeed * 100.0f;
-                float realRange = range * 100.0f;
-
-                Projectile* p = new Projectile(pX, pY, mX, mY, this->projectileTexture, realSpeed, realRange, damage);
-                p->setSize(projectileSize);
-                
-                // Lo guardamos en el Game para que se renderice y actualice físicamente
-                this->projectiles.push_back(p); 
-
-                // LO DEVOLVEMOS para que el Player pueda inyectarle sus modificadores actuales
-                return p; });
-
-            // prueba de efectos
-            // player->addEffect(ProjectileEffect::BLOOD_TEAR);
-            // player->addEffect(ProjectileEffect::WIGGLE_WORM);
-
-            return true;
-        }
-    }
-    return false;
-}
+// ============================================================================
+// EVENTOS E INPUT
+// ============================================================================
 
 void Game::handleEvents()
 {
@@ -144,274 +158,155 @@ void Game::handleEvents()
     }
 }
 
+// ============================================================================
+// LÓGICA DEL JUEGO (UPDATE)
+// ============================================================================
+
 void Game::update(double deltaTime)
 {
-    if (player && baseRoom)
-    {
-        checkRoomTransition();
-        player->update(deltaTime, baseRoom->getGrid());
+    if (!player || !currentRoom)
+        return;
 
-        // --- 1. ACTUALIZAR ENEMIGOS Y DAÑO AL JUGADOR ---
-        SDL_Rect playerRect = player->getDestRect();
+    checkRoomTransition();
+    updateEntities(deltaTime);
+    updateProjectiles(deltaTime);
+    checkCollisions();
+    checkRoomCleared();
+}
 
-        for (auto e : enemies)
-        {
-            e->update(deltaTime, baseRoom->getGrid());
+void Game::updateEntities(double deltaTime)
+{
+    player->update(deltaTime, currentRoom->getGrid());
 
-            // Comprobar colisión Jugador vs Mapache
-            SDL_Rect enemyRect = e->getDestRect();
-            if (checkCollisionAABB(playerRect, enemyRect))
-            {
-                player->takeDamage(e->getDamage(), e->getCoord());
-            }
-        }
+    for (auto e : enemies)
+        e->update(deltaTime, currentRoom->getGrid());
 
-        baseRoom->update(deltaTime);
-        camara.x = 0;
-        camara.y = 0;
-    }
+    currentRoom->update(deltaTime);
+    camara.x = 0;
+    camara.y = 0;
+}
 
-    // --- 2. ACTUALIZAR PROYECTILES Y DAÑO A ENEMIGOS ---
+void Game::updateProjectiles(double deltaTime)
+{
+    Grid *grid = currentRoom->getGrid();
+    int tileSize = grid->getTileSize();
+
     for (int i = 0; i < (int)projectiles.size(); i++)
     {
-        projectiles[i]->update(deltaTime, baseRoom->getGrid());
+        projectiles[i]->update(deltaTime, grid);
 
-        bool projectileDestroyed = false;
+        bool destroy = false;
+        SDL_Rect projRect = projectiles[i]->getDestRect();
 
-        // Si el proyectil agotó su rango o chocó con una pared
         if (projectiles[i]->isExpired())
         {
-            projectileDestroyed = true;
+            destroy = true;
         }
         else
         {
-            // Comprobar colisión Proyectil vs Enemigos
-            SDL_Rect projRect = projectiles[i]->getDestRect();
+            int gridX = (projRect.x + projRect.w / 2) / tileSize;
+            int gridY = (projRect.y + projRect.h / 2) / tileSize;
 
-            for (int j = 0; j < (int)enemies.size(); j++)
+            if (gridX >= 0 && gridX < grid->getCols() && gridY >= 0 && gridY < grid->getRows())
             {
-                SDL_Rect enemyRect = enemies[j]->getDestRect();
-
-                if (checkCollisionAABB(projRect, enemyRect))
+                Tile currentTile = grid->GetTileAt(gridX, gridY);
+                if (currentTile.hasType(TileType::WALL) ||
+                    currentTile.hasType(TileType::ROCK1) ||
+                    currentTile.hasType(TileType::ROCK2))
                 {
-                    // En lugar de pasar daño bruto, le pasamos el puntero al proyectil completo.
-                    enemies[j]->takeDamage(projectiles[i]);
-
-                    projectileDestroyed = true;
-
-                    // ¿Murió el mapache?
-                    if (enemies[j]->isDead())
-                    {
-                        std::cout << "¡Mapache eliminado!" << std::endl;
-                        delete enemies[j];
-                        enemies.erase(enemies.begin() + j);
-                        // Como borramos el enemigo, decrementamos 'j' para no saltarnos el siguiente
-                        j--;
-                    }
-
-                    // Un proyectil normal se destruye al golpear un solo enemigo
-                    break;
+                    destroy = true;
                 }
+            }
+            else
+            {
+                destroy = true; // Salió del mapa
             }
         }
 
-        // Limpiar el proyectil si ha sido destruido
-        if (projectileDestroyed)
+        if (destroy)
         {
             delete projectiles[i];
             projectiles.erase(projectiles.begin() + i);
-            i--; // Ajustamos el índice del bucle de proyectiles
+            i--; // Ajustamos el índice tras borrar
         }
     }
 }
 
-void Game::render()
+void Game::checkCollisions()
 {
-    // --- NUEVO: Ponemos el "pincel" en color Negro antes de limpiar ---
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_Rect playerRect = player->getDestRect();
 
-    // Limpiamos la pantalla (ahora se pintará de negro)
-    SDL_RenderClear(renderer);
-
-    if (baseRoom)
-        baseRoom->render(renderer, camara);
-
+    // 1. Enemigo colisiona con Jugador
     for (auto e : enemies)
-        e->render(renderer, camara);
-
-    if (player)
-        player->render(renderer, camara);
-
-    for (auto p : projectiles)
-        p->render(renderer, camara);
-
-    // Dibujamos la interfaz al final (que volverá a cambiar colores si lo necesita)
-    renderHUD();
-
-    SDL_RenderPresent(renderer);
-}
-
-void Game::renderHUD()
-{
-    if (!player)
-        return;
-
-    // VIDA E ÍTEMS(items aun no hay)
-    int margin = 20;
-    int heartSize = 30;
-    int spacing = 5;
-
-    int heartsToDraw = static_cast<int>(player->getHealth()) / 20;
-
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    for (int i = 0; i < heartsToDraw; i++)
     {
-        SDL_Rect heartRect = {margin + (i * (heartSize + spacing)), margin, heartSize, heartSize};
-        SDL_RenderFillRect(renderer, &heartRect);
-    }
-
-    // MINIMAPA LIMITADO (Distancia <= 2)
-    int miniMapTileSize = 24;
-    int mapMarginTop = 60;
-    int mapMarginRight = 60;
-
-    int logicalW, logicalH;
-    SDL_RenderGetLogicalSize(renderer, &logicalW, &logicalH);
-
-    // Encontrar la posición [x][y] de la habitación actual
-    int currentX = -1, currentY = -1;
-    for (size_t x = 0; x < mapa.size(); x++)
-    {
-        for (size_t y = 0; y < mapa[x].size(); y++)
+        SDL_Rect enemyRect = e->getDestRect();
+        if (checkCollisionAABB(playerRect, enemyRect))
         {
-            int roomId = mapa[x][y];
-            if (roomId != -1 && rooms.find(roomId) != rooms.end() && rooms[roomId] == baseRoom)
-            {
-                currentX = x;
-                currentY = y;
-                break;
-            }
+            player->takeDamage(e->getDamage(), e->getCoord());
         }
-        if (currentX != -1)
-            break;
     }
 
-    int uiCenterX = logicalW - mapMarginRight;
-    int uiCenterY = mapMarginTop;
-
-    // 3. Dibujar SOLO las habitaciones que están a distancia <= 2
-    if (currentX != -1 && currentY != -1)
+    // 2. Proyectil colisiona con Enemigo
+    for (int i = 0; i < (int)projectiles.size(); i++)
     {
-        for (size_t x = 0; x < mapa.size(); x++)
+        SDL_Rect projRect = projectiles[i]->getDestRect();
+        bool projectileHit = false;
+
+        for (int j = 0; j < (int)enemies.size(); j++)
         {
-            for (size_t y = 0; y < mapa[x].size(); y++)
+            SDL_Rect enemyRect = enemies[j]->getDestRect();
+
+            if (checkCollisionAABB(projRect, enemyRect))
             {
-                int roomId = mapa[x][y];
-                if (roomId != -1 && rooms.find(roomId) != rooms.end())
+                enemies[j]->takeDamage(projectiles[i]);
+                projectileHit = true;
+
+                if (enemies[j]->isDead())
                 {
-                    int diffX = static_cast<int>(x) - currentX;
-                    int diffY = static_cast<int>(y) - currentY;
-
-                    if (std::abs(diffX) <= 2 && std::abs(diffY) <= 2)
-                    {
-                        Room *roomToDraw = rooms[roomId];
-
-                        SDL_Rect miniRoom = {
-                            uiCenterX + (diffX * miniMapTileSize) - (miniMapTileSize / 2),
-                            uiCenterY + (diffY * miniMapTileSize) - (miniMapTileSize / 2),
-                            miniMapTileSize,
-                            miniMapTileSize};
-
-                        // Colores por tipo de habitación
-                        RoomType type = roomToDraw->getType();
-                        if (type == RoomType::START)
-                            SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-                        else if (type == RoomType::BOSS)
-                            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-                        else
-                            SDL_SetRenderDrawColor(renderer, 150, 150, 150, 255);
-
-                        SDL_RenderFillRect(renderer, &miniRoom);
-
-                        // Bordes y jugador
-                        if (roomToDraw == baseRoom)
-                        {
-                            SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-                            SDL_RenderDrawRect(renderer, &miniRoom);
-
-                            Grid *grid = baseRoom->getGrid();
-                            float roomPixelW = grid->getCols() * grid->getTileSize();
-                            float roomPixelH = grid->getRows() * grid->getTileSize();
-
-                            float pCX = player->getX() + (player->getDestRect().w / 2.0f);
-                            float pCY = player->getY() + (player->getDestRect().h / 2.0f);
-
-                            float pctX = pCX / roomPixelW;
-                            float pctY = pCY / roomPixelH;
-
-                            int dotSize = 4;
-                            SDL_Rect playerDot = {
-                                miniRoom.x + static_cast<int>(pctX * miniRoom.w) - (dotSize / 2),
-                                miniRoom.y + static_cast<int>(pctY * miniRoom.h) - (dotSize / 2),
-                                dotSize,
-                                dotSize};
-
-                            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-                            SDL_RenderFillRect(renderer, &playerDot);
-                        }
-                        else
-                        {
-                            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-                            SDL_RenderDrawRect(renderer, &miniRoom);
-                        }
-                    } // Fin del if de distancia
+                    delete enemies[j];
+                    enemies.erase(enemies.begin() + j);
+                    j--; // Ajustamos el índice
                 }
+                break; // Un proyectil solo impacta a un enemigo
             }
+        }
+
+        if (projectileHit)
+        {
+            delete projectiles[i];
+            projectiles.erase(projectiles.begin() + i);
+            i--; // Ajustamos el índice
         }
     }
 }
 
-void Game::clean()
+// ============================================================================
+// GESTIÓN DE SALAS Y TRANSICIONES
+// ============================================================================
+
+void Game::checkRoomCleared()
 {
-    delete player;
-
-    for (auto e : enemies)
-        delete e;
-    enemies.clear();
-
-    for (auto const &pair : rooms)
-        delete pair.second;
-    rooms.clear();
-    baseRoom = nullptr;
-
-    for (auto p : projectiles)
-        delete p;
-    projectiles.clear();
-
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    if (currentRoom && !currentRoom->IsCleared() && enemies.empty())
+    {
+        currentRoom->setCleared(true);
+        std::cout << "¡Habitación " << currentRoom->getId() << " completada!" << std::endl;
+        // Lógica de abrir puertas...
+    }
 }
 
 void Game::checkRoomTransition()
 {
-    if (!player || !baseRoom)
+    if (!player || !currentRoom)
         return;
 
-    float playerCenterX = player->getX() + (player->getDestRect().w / 2.0f);
-    float playerCenterY = player->getY() + (player->getDestRect().h / 2.0f);
-
-    Grid *grid = baseRoom->getGrid();
+    Grid *grid = currentRoom->getGrid();
     int tileSize = grid->getTileSize();
 
-    int playerCol = static_cast<int>(playerCenterX) / tileSize;
-    int playerRow = static_cast<int>(playerCenterY) / tileSize;
+    int playerCol = static_cast<int>(player->getX() + (player->getDestRect().w / 2.0f)) / tileSize;
+    int playerRow = static_cast<int>(player->getY() + (player->getDestRect().h / 2.0f)) / tileSize;
 
-    if (playerCol < 0 || playerCol >= grid->getCols() ||
-        playerRow < 0 || playerRow >= grid->getRows())
-    {
+    if (playerCol < 0 || playerCol >= grid->getCols() || playerRow < 0 || playerRow >= grid->getRows())
         return;
-    }
 
     if (weAreInADoor(playerCol, playerRow, grid))
     {
@@ -421,34 +316,37 @@ void Game::checkRoomTransition()
 
         if (playerRow == 0)
         {
-            nextRoom = baseRoom->getTopRoom();
+            nextRoom = currentRoom->getTopRoom();
             newPlayerY = (grid->getRows() - 2) * tileSize;
         }
         else if (playerRow == grid->getRows() - 1)
         {
-            nextRoom = baseRoom->getBottomRoom();
+            nextRoom = currentRoom->getBottomRoom();
             newPlayerY = 1 * tileSize;
         }
         else if (playerCol == 0)
         {
-            nextRoom = baseRoom->getLeftRoom();
+            nextRoom = currentRoom->getLeftRoom();
             newPlayerX = (grid->getCols() - 2) * tileSize;
         }
         else if (playerCol == grid->getCols() - 1)
         {
-            nextRoom = baseRoom->getRightRoom();
+            nextRoom = currentRoom->getRightRoom();
             newPlayerX = 1 * tileSize;
         }
 
         if (nextRoom != nullptr)
         {
-            baseRoom = nextRoom;
+            clearRoomEntities();
+
+            currentRoom = nextRoom;
             player->setX(newPlayerX);
             player->setY(newPlayerY);
 
-            for (auto p : projectiles)
-                delete p;
-            projectiles.clear();
+            if (!currentRoom->IsCleared())
+            {
+                spawnRoomEnemies();
+            }
         }
     }
 }
@@ -464,4 +362,222 @@ bool Game::weAreInADoor(int col, int row, Grid *grid)
     if (grid->GetTileAt(col, row).hasType(TileType::BOTTOMDOOR))
         return true;
     return false;
+}
+
+void Game::clearRoomEntities()
+{
+    for (auto e : enemies)
+        delete e;
+    enemies.clear();
+
+    for (auto p : projectiles)
+        delete p;
+    projectiles.clear();
+}
+
+void Game::spawnRoomEnemies()
+{
+    const auto &spawns = currentRoom->getSpawnsEnemigos();
+    for (const auto &spawn : spawns)
+    {
+        if (spawn.tipo == 'm')
+        {
+            MapCoord pos = {spawn.col, spawn.row};
+            Mapache *nuevoMapache = new Mapache(pos, player, currentRoom, mapacheTexture);
+            enemies.push_back(nuevoMapache);
+        }
+    }
+    std::cout << "¡Generados " << enemies.size() << " enemigos en la sala " << currentRoom->getId() << "!" << std::endl;
+}
+
+// ============================================================================
+// RENDERIZADO
+// ============================================================================
+
+void Game::render()
+{
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    if (currentRoom)
+        currentRoom->render(renderer, camara);
+
+    for (auto e : enemies)
+        e->render(renderer, camara);
+
+    if (player)
+        player->render(renderer, camara);
+
+    for (auto p : projectiles)
+        p->render(renderer, camara);
+
+    renderHUD();
+
+    SDL_RenderPresent(renderer);
+}
+
+void Game::renderHUD()
+{
+    if (!player)
+        return;
+
+    renderHealth();
+    renderMinimap();
+}
+
+void Game::renderHealth()
+{
+    int margin = 20;
+    int heartSize = 30;
+    int spacing = 5;
+    int heartsToDraw = static_cast<int>(player->getHealth()) / 20;
+
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    for (int i = 0; i < heartsToDraw; i++)
+    {
+        SDL_Rect heartRect = {margin + (i * (heartSize + spacing)), margin, heartSize, heartSize};
+        SDL_RenderFillRect(renderer, &heartRect);
+    }
+}
+
+void Game::renderMinimap()
+{
+    int miniMapTileSize = 24;
+    int mapMarginTop = 60;
+    int mapMarginRight = 60;
+
+    int logicalW, logicalH;
+    SDL_RenderGetLogicalSize(renderer, &logicalW, &logicalH);
+
+    int currentX = -1, currentY = -1;
+    for (size_t x = 0; x < mapa.size(); x++)
+    {
+        for (size_t y = 0; y < mapa[x].size(); y++)
+        {
+            int roomId = mapa[x][y];
+            if (roomId != -1 && rooms.find(roomId) != rooms.end() && rooms[roomId] == currentRoom)
+            {
+                currentX = x;
+                currentY = y;
+                break;
+            }
+        }
+        if (currentX != -1)
+            break;
+    }
+
+    int uiCenterX = logicalW - mapMarginRight;
+    int uiCenterY = mapMarginTop;
+
+    if (currentX != -1 && currentY != -1)
+    {
+        for (size_t x = 0; x < mapa.size(); x++)
+        {
+            for (size_t y = 0; y < mapa[x].size(); y++)
+            {
+                int roomId = mapa[x][y];
+                if (roomId != -1 && rooms.find(roomId) != rooms.end())
+                {
+                    int diffX = static_cast<int>(x) - currentX;
+                    int diffY = static_cast<int>(y) - currentY;
+
+                    if (std::abs(diffX) <= 2 && std::abs(diffY) <= 2)
+                    {
+                        Room *roomToDraw = rooms[roomId];
+                        SDL_Rect miniRoom = {
+                            uiCenterX + (diffX * miniMapTileSize) - (miniMapTileSize / 2),
+                            uiCenterY + (diffY * miniMapTileSize) - (miniMapTileSize / 2),
+                            miniMapTileSize, miniMapTileSize};
+
+                        RoomType type = roomToDraw->getType();
+                        if (type == RoomType::START)
+                            SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+                        else if (type == RoomType::BOSS)
+                            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                        else
+                            SDL_SetRenderDrawColor(renderer, 150, 150, 150, 255);
+
+                        SDL_RenderFillRect(renderer, &miniRoom);
+
+                        // Pintar Puertas
+                        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                        int doorLength = 8, doorThickness = 3;
+
+                        if (roomToDraw->getTopRoom() != nullptr)
+                        {
+                            SDL_Rect r = {miniRoom.x + (miniMapTileSize / 2) - (doorLength / 2), miniRoom.y, doorLength, doorThickness};
+                            SDL_RenderFillRect(renderer, &r);
+                        }
+                        if (roomToDraw->getBottomRoom() != nullptr)
+                        {
+                            SDL_Rect r = {miniRoom.x + (miniMapTileSize / 2) - (doorLength / 2), miniRoom.y + miniMapTileSize - doorThickness, doorLength, doorThickness};
+                            SDL_RenderFillRect(renderer, &r);
+                        }
+                        if (roomToDraw->getLeftRoom() != nullptr)
+                        {
+                            SDL_Rect r = {miniRoom.x, miniRoom.y + (miniMapTileSize / 2) - (doorLength / 2), doorThickness, doorLength};
+                            SDL_RenderFillRect(renderer, &r);
+                        }
+                        if (roomToDraw->getRightRoom() != nullptr)
+                        {
+                            SDL_Rect r = {miniRoom.x + miniMapTileSize - doorThickness, miniRoom.y + (miniMapTileSize / 2) - (doorLength / 2), doorThickness, doorLength};
+                            SDL_RenderFillRect(renderer, &r);
+                        }
+
+                        if (roomToDraw == currentRoom)
+                        {
+                            SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+                            SDL_RenderDrawRect(renderer, &miniRoom);
+
+                            Grid *grid = currentRoom->getGrid();
+                            float pctX = (player->getX() + (player->getDestRect().w / 2.0f)) / (grid->getCols() * grid->getTileSize());
+                            float pctY = (player->getY() + (player->getDestRect().h / 2.0f)) / (grid->getRows() * grid->getTileSize());
+
+                            int dotSize = 4;
+                            SDL_Rect playerDot = {
+                                miniRoom.x + static_cast<int>(pctX * miniRoom.w) - (dotSize / 2),
+                                miniRoom.y + static_cast<int>(pctY * miniRoom.h) - (dotSize / 2),
+                                dotSize, dotSize};
+
+                            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+                            SDL_RenderFillRect(renderer, &playerDot);
+                        }
+                        else
+                        {
+                            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                            SDL_RenderDrawRect(renderer, &miniRoom);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// ============================================================================
+// LIMPIEZA DE MEMORIA
+// ============================================================================
+
+void Game::clean()
+{
+    delete player;
+
+    for (auto e : enemies)
+        delete e;
+    enemies.clear();
+
+    for (auto const &pair : rooms)
+        delete pair.second;
+    rooms.clear();
+
+    currentRoom = nullptr;
+    baseRoom = nullptr;
+
+    for (auto p : projectiles)
+        delete p;
+    projectiles.clear();
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 }

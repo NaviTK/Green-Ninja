@@ -27,14 +27,25 @@ Grid::~Grid()
 
 void Grid::loadTextures(SDL_Renderer *renderer, std::map<std::string, std::string> &spritePaths)
 {
+    // TIPE OF FLOORS
     tileTextures[TileType::FLOOR1] = TextureManager::LoadTexture(spritePaths["floor1"].c_str(), renderer);
     tileTextures[TileType::FLOOR2] = TextureManager::LoadTexture(spritePaths["floor2"].c_str(), renderer);
     tileTextures[TileType::FLOOR3] = TextureManager::LoadTexture(spritePaths["floor3"].c_str(), renderer);
+    // ELEMENTS OF THE ROOM
     tileTextures[TileType::WALL] = TextureManager::LoadTexture(spritePaths["wall"].c_str(), renderer);
+    tileTextures[TileType::FOSA] = TextureManager::LoadTexture(spritePaths["fosa"].c_str(), renderer);
+    tileTextures[TileType::ROCK1] = TextureManager::LoadTexture(spritePaths["rock1"].c_str(), renderer);
+    tileTextures[TileType::ROCK2] = TextureManager::LoadTexture(spritePaths["rock2"].c_str(), renderer);
+    // OPEN DOORS
     tileTextures[TileType::RIGHTDOOR] = TextureManager::LoadTexture(spritePaths["rightDoor"].c_str(), renderer);
     tileTextures[TileType::LEFTDOOR] = TextureManager::LoadTexture(spritePaths["leftDoor"].c_str(), renderer);
     tileTextures[TileType::TOPDOOR] = TextureManager::LoadTexture(spritePaths["topDoor"].c_str(), renderer);
     tileTextures[TileType::BOTTOMDOOR] = TextureManager::LoadTexture(spritePaths["bottomDoor"].c_str(), renderer);
+    // CLOSED DOORS
+    tileTextures[TileType::CLOSEDRIGHTDOOR] = TextureManager::LoadTexture(spritePaths["rightDoorClosed"].c_str(), renderer);
+    tileTextures[TileType::CLOSEDLEFTDOOR] = TextureManager::LoadTexture(spritePaths["leftDoorClosed"].c_str(), renderer);
+    tileTextures[TileType::CLOSEDTOPDOOR] = TextureManager::LoadTexture(spritePaths["topDoorClosed"].c_str(), renderer);
+    tileTextures[TileType::CLOSEDBOTTOMDOOR] = TextureManager::LoadTexture(spritePaths["bottomDoorClosed"].c_str(), renderer);
 }
 
 void Grid::DrawGrid(SDL_Renderer *renderer, const SDL_Rect &camera)
@@ -59,11 +70,11 @@ void Grid::DrawGrid(SDL_Renderer *renderer, const SDL_Rect &camera)
 
             TileType currentType = mapData[i][j].getType();
 
-            // MAGIA DE OPTIMIZACIÓN:
             // Buscamos si el estado actual de la casilla tiene una textura asignada en el mapa.
-            // Si la tiene, la dibujamos del tirón. ¡Adiós a los if interminables!
             if (tileTextures.find(currentType) != tileTextures.end())
             {
+                if (currentType == TileType::ROCK1 || currentType == TileType::ROCK2)
+                    TextureManager::Draw(tileTextures[Lvlfloor], src, dest, renderer);
                 TextureManager::Draw(tileTextures[currentType], src, dest, renderer);
             }
         }

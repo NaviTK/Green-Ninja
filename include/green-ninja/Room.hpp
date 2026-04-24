@@ -9,6 +9,13 @@
 #include <algorithm> // Para std::shuffle
 #include <random>    // Para generación de números aleatorios moderna
 
+struct DatosSpawn
+{
+    int col;
+    int row;
+    char tipo;
+};
+
 typedef std::pair<int, int> MapCoord;
 typedef std::vector<std::vector<int>> Mapa;
 
@@ -41,6 +48,8 @@ private:
     RoomType type;  // El tipo de habitación (START, NORMAL, BIG, etc.)
     bool isCleared; // Para saber si ya matamos a todos y podemos abrir las puertas
 
+    std::vector<DatosSpawn> spawnsEnemigos; // lista con las posiciones y tipo de enemigo de la sala
+    void cargarLayoutNormalAleatorio();
     std::list<std::pair<int, int>> getDoors(); // Devuelve la lista de coordenadas de las puertas de esta sala (para que Game sepa dónde dibujarlas y dónde detectar colisiones)
 
     Room *expandirMapa(int currentDepth, int maxDepth, std::map<int, Room *> &roomsMap, Mapa &mapa, direction direccion, MapCoord lastCoord);
@@ -81,7 +90,6 @@ public:
     int getId() const { return id; }
     RoomType getType() const { return type; }
     bool IsCleared() const { return isCleared; }
-
     // Getters de vecinos para cuando el jugador cruce una puerta
     Room *getTopRoom() const { return topRoom; }
     Room *getBottomRoom() const { return bottomRoom; }
@@ -94,5 +102,7 @@ public:
     void setLeftRoom(Room *room) { leftRoom = room; }
     void setRightRoom(Room *room) { rightRoom = room; }
 
+    void setCleared(bool state) { isCleared = state; }
+    const std::vector<DatosSpawn> &getSpawnsEnemigos() const { return spawnsEnemigos; }
     const Mapa &getCuadricula() const { return cuadriculaMapa; }
 };

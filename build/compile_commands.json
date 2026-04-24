@@ -49,6 +49,12 @@
 },
 {
   "directory": "C:/LarianStudios/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\entities\\enemies\\bat.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\entities\\enemies\\bat.cpp",
+  "file": "C:/LarianStudios/Green-Ninja/src/entities/enemies/bat.cpp",
+  "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/bat.cpp.obj"
+},
+{
+  "directory": "C:/LarianStudios/Green-Ninja/build",
   "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/LarianStudios/Green-Ninja/include -isystem C:/msys64/ucrt64/include/SDL2 -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\world\\Grid.cpp.obj -c C:\\LarianStudios\\Green-Ninja\\src\\world\\Grid.cpp",
   "file": "C:/LarianStudios/Green-Ninja/src/world/Grid.cpp",
   "output": "C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.obj"
