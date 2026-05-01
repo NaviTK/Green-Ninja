@@ -131,11 +131,26 @@ CMakeFiles/ElementalGridTactics.dir/src/core/ConfigManager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ElementalGridTactics.dir/src/core/ConfigManager.cpp.s"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\i\Green-Ninja\src\core\ConfigManager.cpp -o CMakeFiles\ElementalGridTactics.dir\src\core\ConfigManager.cpp.s
 
+CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj: CMakeFiles/ElementalGridTactics.dir/flags.make
+CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj: CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp
+CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj: C:/i/Green-Ninja/src/core/SpatialManager.cpp
+CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj: CMakeFiles/ElementalGridTactics.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj -MF CMakeFiles\ElementalGridTactics.dir\src\core\SpatialManager.cpp.obj.d -o CMakeFiles\ElementalGridTactics.dir\src\core\SpatialManager.cpp.obj -c C:\i\Green-Ninja\src\core\SpatialManager.cpp
+
+CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.i"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\i\Green-Ninja\src\core\SpatialManager.cpp > CMakeFiles\ElementalGridTactics.dir\src\core\SpatialManager.cpp.i
+
+CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.s"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\i\Green-Ninja\src\core\SpatialManager.cpp -o CMakeFiles\ElementalGridTactics.dir\src\core\SpatialManager.cpp.s
+
 CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj: CMakeFiles/ElementalGridTactics.dir/flags.make
 CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj: CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp
 CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj: C:/i/Green-Ninja/src/entities/Player.cpp
 CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj: CMakeFiles/ElementalGridTactics.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj -MF CMakeFiles\ElementalGridTactics.dir\src\entities\Player.cpp.obj.d -o CMakeFiles\ElementalGridTactics.dir\src\entities\Player.cpp.obj -c C:\i\Green-Ninja\src\entities\Player.cpp
 
 CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.i: cmake_force
@@ -150,7 +165,7 @@ CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj: CMakeFiles/
 CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj: CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp
 CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj: C:/i/Green-Ninja/src/entities/Projectile.cpp
 CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj: CMakeFiles/ElementalGridTactics.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj -MF CMakeFiles\ElementalGridTactics.dir\src\entities\Projectile.cpp.obj.d -o CMakeFiles\ElementalGridTactics.dir\src\entities\Projectile.cpp.obj -c C:\i\Green-Ninja\src\entities\Projectile.cpp
 
 CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.i: cmake_force
@@ -165,7 +180,7 @@ CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj: CM
 CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj: CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp
 CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj: C:/i/Green-Ninja/src/entities/ProjectileModifiers.cpp
 CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj: CMakeFiles/ElementalGridTactics.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj -MF CMakeFiles\ElementalGridTactics.dir\src\entities\ProjectileModifiers.cpp.obj.d -o CMakeFiles\ElementalGridTactics.dir\src\entities\ProjectileModifiers.cpp.obj -c C:\i\Green-Ninja\src\entities\ProjectileModifiers.cpp
 
 CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.i: cmake_force
@@ -180,7 +195,7 @@ CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.obj: CMakeFil
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.obj: CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.obj: C:/i/Green-Ninja/src/entities/enemies/Enemy.cpp
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.obj: CMakeFiles/ElementalGridTactics.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.obj"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.obj -MF CMakeFiles\ElementalGridTactics.dir\src\entities\enemies\Enemy.cpp.obj.d -o CMakeFiles\ElementalGridTactics.dir\src\entities\enemies\Enemy.cpp.obj -c C:\i\Green-Ninja\src\entities\enemies\Enemy.cpp
 
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.i: cmake_force
@@ -195,7 +210,7 @@ CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/mapache.cpp.obj: CMakeF
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/mapache.cpp.obj: CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/mapache.cpp.obj: C:/i/Green-Ninja/src/entities/enemies/mapache.cpp
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/mapache.cpp.obj: CMakeFiles/ElementalGridTactics.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/mapache.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/mapache.cpp.obj"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/mapache.cpp.obj -MF CMakeFiles\ElementalGridTactics.dir\src\entities\enemies\mapache.cpp.obj.d -o CMakeFiles\ElementalGridTactics.dir\src\entities\enemies\mapache.cpp.obj -c C:\i\Green-Ninja\src\entities\enemies\mapache.cpp
 
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/mapache.cpp.i: cmake_force
@@ -210,7 +225,7 @@ CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/bat.cpp.obj: CMakeFiles
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/bat.cpp.obj: CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/bat.cpp.obj: C:/i/Green-Ninja/src/entities/enemies/bat.cpp
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/bat.cpp.obj: CMakeFiles/ElementalGridTactics.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/bat.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/bat.cpp.obj"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/bat.cpp.obj -MF CMakeFiles\ElementalGridTactics.dir\src\entities\enemies\bat.cpp.obj.d -o CMakeFiles\ElementalGridTactics.dir\src\entities\enemies\bat.cpp.obj -c C:\i\Green-Ninja\src\entities\enemies\bat.cpp
 
 CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/bat.cpp.i: cmake_force
@@ -225,7 +240,7 @@ CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.obj: CMakeFiles/Elemental
 CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.obj: CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp
 CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.obj: C:/i/Green-Ninja/src/world/Grid.cpp
 CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.obj: CMakeFiles/ElementalGridTactics.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.obj"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.obj -MF CMakeFiles\ElementalGridTactics.dir\src\world\Grid.cpp.obj.d -o CMakeFiles\ElementalGridTactics.dir\src\world\Grid.cpp.obj -c C:\i\Green-Ninja\src\world\Grid.cpp
 
 CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.i: cmake_force
@@ -240,7 +255,7 @@ CMakeFiles/ElementalGridTactics.dir/src/world/Room.cpp.obj: CMakeFiles/Elemental
 CMakeFiles/ElementalGridTactics.dir/src/world/Room.cpp.obj: CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp
 CMakeFiles/ElementalGridTactics.dir/src/world/Room.cpp.obj: C:/i/Green-Ninja/src/world/Room.cpp
 CMakeFiles/ElementalGridTactics.dir/src/world/Room.cpp.obj: CMakeFiles/ElementalGridTactics.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/world/Room.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/world/Room.cpp.obj"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ElementalGridTactics.dir/src/world/Room.cpp.obj -MF CMakeFiles\ElementalGridTactics.dir\src\world\Room.cpp.obj.d -o CMakeFiles\ElementalGridTactics.dir\src\world\Room.cpp.obj -c C:\i\Green-Ninja\src\world\Room.cpp
 
 CMakeFiles/ElementalGridTactics.dir/src/world/Room.cpp.i: cmake_force
@@ -255,7 +270,7 @@ CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.obj: CMakeFiles/Elemental
 CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.obj: CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp
 CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.obj: C:/i/Green-Ninja/src/world/Tile.cpp
 CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.obj: CMakeFiles/ElementalGridTactics.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.obj"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.obj -MF CMakeFiles\ElementalGridTactics.dir\src\world\Tile.cpp.obj.d -o CMakeFiles\ElementalGridTactics.dir\src\world\Tile.cpp.obj -c C:\i\Green-Ninja\src\world\Tile.cpp
 
 CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.i: cmake_force
@@ -272,6 +287,7 @@ ElementalGridTactics_OBJECTS = \
 "CMakeFiles/ElementalGridTactics.dir/src/core/Game.cpp.obj" \
 "CMakeFiles/ElementalGridTactics.dir/src/core/TextureManager.cpp.obj" \
 "CMakeFiles/ElementalGridTactics.dir/src/core/ConfigManager.cpp.obj" \
+"CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj" \
 "CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj" \
 "CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj" \
 "CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj" \
@@ -289,6 +305,7 @@ ElementalGridTactics.exe: CMakeFiles/ElementalGridTactics.dir/src/Main.cpp.obj
 ElementalGridTactics.exe: CMakeFiles/ElementalGridTactics.dir/src/core/Game.cpp.obj
 ElementalGridTactics.exe: CMakeFiles/ElementalGridTactics.dir/src/core/TextureManager.cpp.obj
 ElementalGridTactics.exe: CMakeFiles/ElementalGridTactics.dir/src/core/ConfigManager.cpp.obj
+ElementalGridTactics.exe: CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj
 ElementalGridTactics.exe: CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj
 ElementalGridTactics.exe: CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj
 ElementalGridTactics.exe: CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj
@@ -305,7 +322,7 @@ ElementalGridTactics.exe: C:/msys64/ucrt64/lib/libSDL2_image.dll.a
 ElementalGridTactics.exe: CMakeFiles/ElementalGridTactics.dir/linkLibs.rsp
 ElementalGridTactics.exe: CMakeFiles/ElementalGridTactics.dir/objects1.rsp
 ElementalGridTactics.exe: CMakeFiles/ElementalGridTactics.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable ElementalGridTactics.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable ElementalGridTactics.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\ElementalGridTactics.dir\link.txt --verbose=$(VERBOSE)
 	C:\msys64\ucrt64\bin\cmake.exe -E copy_if_different C:/msys64/ucrt64/bin/SDL2.dll C:/i/Green-Ninja/build
 

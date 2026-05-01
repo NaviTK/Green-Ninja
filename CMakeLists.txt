@@ -20,6 +20,7 @@ set(SOURCES
     src/core/Game.cpp
     src/core/TextureManager.cpp
     src/core/ConfigManager.cpp
+    src/core/SpatialManager.cpp
     src/entities/Player.cpp
     src/entities/Projectile.cpp
     src/entities/ProjectileModifiers.cpp

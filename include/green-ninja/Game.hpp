@@ -7,6 +7,7 @@
 #include "green-ninja/Player.hpp"
 #include "green-ninja/Projectile.hpp"
 #include "green-ninja/Room.hpp"
+#include "green-ninja/SpatialManager.hpp"
 #include <map>
 
 class Enemy;
@@ -45,11 +46,16 @@ private:
     // --- NUEVAS MINIFUNCIONES DE RENDERIZADO ---
     void renderHealth();
     void renderMinimap();
-
+    void renderDebug();
+    
     // --- NUEVAS MINIFUNCIONES DE TRANSICIÓN DE SALA ---
     void clearRoomEntities();
     void spawnRoomEnemies();
     bool isRunning;
+    // Managers
+    SpatialManager spatialManager;
+    // debug
+    bool showDebug = false;
     // window and renderer
     SDL_Window *window;
     int windowWidht, windowHeight;

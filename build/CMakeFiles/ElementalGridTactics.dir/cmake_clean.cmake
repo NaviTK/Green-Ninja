@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/ElementalGridTactics.dir/src/core/ConfigManager.cpp.obj.d"
   "CMakeFiles/ElementalGridTactics.dir/src/core/Game.cpp.obj"
   "CMakeFiles/ElementalGridTactics.dir/src/core/Game.cpp.obj.d"
+  "CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj"
+  "CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj.d"
   "CMakeFiles/ElementalGridTactics.dir/src/core/TextureManager.cpp.obj"
   "CMakeFiles/ElementalGridTactics.dir/src/core/TextureManager.cpp.obj.d"
   "CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj"

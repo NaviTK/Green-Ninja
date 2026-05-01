@@ -25,6 +25,12 @@
 },
 {
   "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\core\\SpatialManager.cpp.obj -c C:\\i\\Green-Ninja\\src\\core\\SpatialManager.cpp",
+  "file": "C:/i/Green-Ninja/src/core/SpatialManager.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
   "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\entities\\Player.cpp.obj -c C:\\i\\Green-Ninja\\src\\entities\\Player.cpp",
   "file": "C:/i/Green-Ninja/src/entities/Player.cpp",
   "output": "CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj"

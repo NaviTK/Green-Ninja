@@ -28,7 +28,7 @@ static bool checkCollisionAABB(const SDL_Rect &a, const SDL_Rect &b)
 // CONSTRUCTOR Y DESTRUCTOR
 // ============================================================================
 
-Game::Game() : window(nullptr), renderer(nullptr), isRunning(false), player(nullptr), currentRoom(nullptr), baseRoom(nullptr) {
+Game::Game() : window(nullptr), renderer(nullptr), isRunning(false), player(nullptr), currentRoom(nullptr), baseRoom(nullptr), spatialManager(0.0f, 0.0f){
     projectiles.reserve(maxNumProjectiles);
     freeProjectiles.reserve(maxNumProjectiles); // Reservamos para evitar realojos
 
@@ -100,6 +100,8 @@ void Game::initGameWorld()
     int roomPixelHeight = currentRoom->getGrid()->getRows() * currentRoom->getGrid()->getTileSize();
 
     SDL_RenderSetLogicalSize(renderer, roomPixelWidth, roomPixelHeight);
+    // inicializamos el spatialManager con las medidas de la habitacion
+    spatialManager.updateMapDimensions(roomPixelWidth, roomPixelHeight);
 
     LoadAllTextures(renderer);
 
@@ -111,9 +113,9 @@ void Game::initGameWorld()
     float spawnY = filaCentro * tileSize;
 
     player = new Player(spawnX, spawnY, renderer, playerTexture);
+
+    // cargamos la configuracion de bindings de teclas
     ConfigManager configManager;
-    
-    // AQUÍ ESTÁ LA MAGIA: Simplemente le das la ruta a la carpeta assets
     configManager.loadAndApplyConfig("../assets/config.txt", player);
 
     SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
@@ -195,6 +197,9 @@ void Game::handleEvents()
         {
             if (event.key.keysym.sym == SDLK_ESCAPE)
                 isRunning = false;
+            if (event.key.keysym.sym == SDLK_n) 
+                showDebug = !showDebug; 
+            
         }
     }
 }
@@ -211,6 +216,13 @@ void Game::update(double deltaTime)
     checkRoomTransition();
     updateEntities(deltaTime);
     updateProjectiles(deltaTime);
+
+    // Spatial
+    spatialManager.clear();
+    for (Enemy* e : enemies) {
+        if (!e->isDead()) spatialManager.insert(e);
+    }
+    // end spatial
     checkCollisions();
     checkRoomCleared();
 }
@@ -266,9 +278,11 @@ void Game::checkCollisions()
 {
     SDL_Rect playerRect = player->getDestRect();
 
-    // 1. Enemigo colisiona con Jugador
+    // 1. Enemigo colisiona con Jugador (No requiere SpatialManager, es rápido)
     for (Enemy* e : enemies)
     {
+        if (e->isDead()) continue;
+        
         SDL_Rect enemyRect = e->getDestRect();
         if (checkCollisionAABB(playerRect, enemyRect))
         {
@@ -276,26 +290,40 @@ void Game::checkCollisions()
         }
     }
 
-    // 2. Proyectil colisiona con Enemigo
+    // 2. Proyectiles colisionan con Enemigos (¡USAMOS EL SPATIAL MANAGER!)
     for (Projectile* p : projectiles) {
         if (!p->isAlive()) continue;
 
         SDL_Rect projRect = p->getDestRect();
 
-        for (int j = 0; j < (int)enemies.size(); j++) {
-            SDL_Rect enemyRect = enemies[j]->getDestRect();
+        // FÍJATE AQUÍ: Cambiamos Enemy* e por Entity* rawEntity
+        spatialManager.checkCollisionsFor(p, [&](Entity* rawEntity) {
+            
+            // 1. Transformamos (Casteamos) el Entity genérico a Enemy
+            Enemy* e = dynamic_cast<Enemy*>(rawEntity);
+            
+            // Si por algún motivo el casteo falla (no era un enemigo), salimos
+            if (!e) return; 
 
+            // 2. Si la bala ya impactó o el enemigo ya murió, ignoramos
+            if (!p->isAlive() || e->isDead()) return; 
+
+            SDL_Rect enemyRect = e->getDestRect();
             if (checkCollisionAABB(projRect, enemyRect)) {
-                enemies[j]->takeDamage(p);
-                p->kill(); // Cambiamos delete por kill
+                e->takeDamage(p);
+                p->kill(); 
                 freeProjectiles.push_back(p);
-                if (enemies[j]->isDead()) {
-                    delete enemies[j];
-                    enemies.erase(enemies.begin() + j);
-                    j--;
-                }
-                break; 
             }
+        });
+    }
+
+    // 3. LIMPIEZA DIFERIDA (Sweep Phase)
+    // Borramos los enemigos muertos AHORA, para no corromper la memoria del SpatialManager
+    for (int j = 0; j < (int)enemies.size(); j++) {
+        if (enemies[j]->isDead()) {
+            delete enemies[j];
+            enemies.erase(enemies.begin() + j);
+            j--; // Retrocedemos el índice al borrar
         }
     }
 }
@@ -362,6 +390,11 @@ void Game::checkRoomTransition()
             currentRoom = nextRoom;
             player->setX(newPlayerX);
             player->setY(newPlayerY);
+
+            // Actualizamos el tamaño del mar del grid del spatial Manager, para mantener consistencia
+            int roomW = currentRoom->getGrid()->getCols() * currentRoom->getGrid()->getTileSize();
+            int roomH = currentRoom->getGrid()->getRows() * currentRoom->getGrid()->getTileSize();
+            spatialManager.updateMapDimensions(roomW, roomH);
 
             if (!currentRoom->IsCleared())
             {
@@ -431,8 +464,36 @@ void Game::render()
         if (p->isAlive()) p->render(renderer, camara);
 
     renderHUD();
-
+    if (showDebug) renderDebug();
     SDL_RenderPresent(renderer);
+}
+
+void Game::renderDebug()
+{
+    // 1. Color verde neón
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); 
+
+    // 2. Calcular el tamaño del mapa usando TUS métodos
+    float mapWidth = currentRoom->getGrid()->getCols() * currentRoom->getGrid()->getTileSize();
+    float mapHeight = currentRoom->getGrid()->getRows() * currentRoom->getGrid()->getTileSize();
+
+    // 3. Obtener el centro real que está usando el SpatialManager
+    float worldMidX = spatialManager.getMidX();
+    float worldMidY = spatialManager.getMidY();
+
+    // 4. Convertir a coordenadas de pantalla (restando cámara)
+    float screenX = worldMidX - camara.x;
+    float screenY = worldMidY - camara.y;
+
+    // 5. Dibujar las líneas usando mapWidth y mapHeight (las reales)
+    // Línea Vertical: desde el tope del mapa hasta el fondo
+    SDL_RenderDrawLineF(renderer, screenX, 0 - camara.y, screenX, mapHeight - camara.y);
+    
+    // Línea Horizontal: desde el inicio del mapa hasta el final
+    SDL_RenderDrawLineF(renderer, 0 - camara.x, screenY, mapWidth - camara.x, screenY);
+
+    // 6. Dibujar los rectángulos de colores sobre los enemigos
+    spatialManager.renderDebugEnemies(renderer, camara);
 }
 
 void Game::renderHUD()

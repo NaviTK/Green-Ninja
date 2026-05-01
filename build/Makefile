@@ -200,6 +200,30 @@ src/core/Game.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\ElementalGridTactics.dir\build.make CMakeFiles/ElementalGridTactics.dir/src/core/Game.cpp.s
 .PHONY : src/core/Game.cpp.s
 
+src/core/SpatialManager.obj: src/core/SpatialManager.cpp.obj
+.PHONY : src/core/SpatialManager.obj
+
+# target to build an object file
+src/core/SpatialManager.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ElementalGridTactics.dir\build.make CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.obj
+.PHONY : src/core/SpatialManager.cpp.obj
+
+src/core/SpatialManager.i: src/core/SpatialManager.cpp.i
+.PHONY : src/core/SpatialManager.i
+
+# target to preprocess a source file
+src/core/SpatialManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ElementalGridTactics.dir\build.make CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.i
+.PHONY : src/core/SpatialManager.cpp.i
+
+src/core/SpatialManager.s: src/core/SpatialManager.cpp.s
+.PHONY : src/core/SpatialManager.s
+
+# target to generate assembly for a file
+src/core/SpatialManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ElementalGridTactics.dir\build.make CMakeFiles/ElementalGridTactics.dir/src/core/SpatialManager.cpp.s
+.PHONY : src/core/SpatialManager.cpp.s
+
 src/core/TextureManager.obj: src/core/TextureManager.cpp.obj
 .PHONY : src/core/TextureManager.obj
 
@@ -458,6 +482,9 @@ help:
 	@echo ... src/core/Game.obj
 	@echo ... src/core/Game.i
 	@echo ... src/core/Game.s
+	@echo ... src/core/SpatialManager.obj
+	@echo ... src/core/SpatialManager.i
+	@echo ... src/core/SpatialManager.s
 	@echo ... src/core/TextureManager.obj
 	@echo ... src/core/TextureManager.i
 	@echo ... src/core/TextureManager.s

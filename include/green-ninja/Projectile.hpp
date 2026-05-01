@@ -1,7 +1,7 @@
 #pragma once
 #include "green-ninja/Entity.hpp"
 #include "green-ninja/ProjectileModifier.hpp" // NUEVO
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <vector>
 #include <memory>
 

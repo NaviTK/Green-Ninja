@@ -12,13 +12,26 @@ protected:
     SDL_Rect destRect;
     SDL_Texture *texture;
 
+    // --- NUEVAS VARIABLES DE HITBOX ---
+    // Offset (desplazamiento) relativo a x e y
+    float hitBoxOffsetX, hitBoxOffsetY;
+    // Tamaño real de la caja de colisión
+    float hitBoxWidth, hitBoxHeight;
+
 public:
     Entity(float x, float y, SDL_Texture *tex)
         : x(x), y(y), texture(tex)
     {
-        // Inicializamos los rects para evitar basura en memoria
         srcRect = {0, 0, 0, 0};
         destRect = {0, 0, 0, 0};
+
+        // Por defecto, inicializamos la hitbox a 0.
+        // Las clases hijas (Player, Enemy, etc.) deberán reescribir
+        // estos valores en sus propios constructores según su sprite.
+        hitBoxOffsetX = 0.0f;
+        hitBoxOffsetY = 0.0f;
+        hitBoxWidth = 0.0f;
+        hitBoxHeight = 0.0f;
     }
 
     virtual ~Entity() {}
@@ -27,12 +40,21 @@ public:
 
     virtual void render(SDL_Renderer *ren, const SDL_Rect &camera)
     {
-        // Actualizamos la posición del rectángulo de destino antes de dibujar
         destRect.x = static_cast<int>(x - camera.x);
         destRect.y = static_cast<int>(y - camera.y);
 
-        // ORDEN (Textura, srcRect, destRect, Renderer)
         TextureManager::Draw(texture, srcRect, destRect, ren);
+    }
+
+    // Devuelve la Hitbox calculada en coordenadas exactas del MUNDO
+    SDL_FRect getCollider() const 
+    {
+        return { 
+            x + hitBoxOffsetX, 
+            y + hitBoxOffsetY, 
+            hitBoxWidth, 
+            hitBoxHeight 
+        };
     }
 
     float getX() const { return x; }
