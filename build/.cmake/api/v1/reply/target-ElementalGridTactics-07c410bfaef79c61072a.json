@@ -110,14 +110,14 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++17"
+					"fragment" : "-std=gnu++17"
 				}
 			],
 			"includes" : 
 			[
 				{
 					"backtrace" : 9,
-					"path" : "C:/LarianStudios/Green-Ninja/include"
+					"path" : "C:/i/Green-Ninja/include"
 				},
 				{
 					"backtrace" : 2,
@@ -156,10 +156,6 @@
 	{
 		"commandFragments" : 
 		[
-			{
-				"fragment" : "-g",
-				"role" : "flags"
-			},
 			{
 				"backtrace" : 2,
 				"fragment" : "C:\\msys64\\ucrt64\\lib\\libSDL2main.a",

@@ -85,66 +85,60 @@ void Player::movementLogic(double deltaTime, Grid *grid)
     float moveX = 0;
     float moveY = 0;
 
-    // --- APLICAR INERCIA DEL KNOCKBACK ANTES DEL MOVIMIENTO NORMAL ---
+    // 1. APLICAR INERCIA DEL KNOCKBACK
     if (std::abs(knockbackVX) > 0.1f || std::abs(knockbackVY) > 0.1f)
     {
         moveX += knockbackVX * deltaTime;
         moveY += knockbackVY * deltaTime;
 
-        // Fricción para que se frene suavemente
         float friction = 10.0f;
         knockbackVX -= knockbackVX * friction * deltaTime;
         knockbackVY -= knockbackVY * friction * deltaTime;
     }
-    // -------------------------------------------------------------------------
 
-    // 2. Calculamos el movimiento Vertical
-    if (keystates[SDL_SCANCODE_UP])
+    // 2. Movimiento Vertical (W o Flecha Arriba / S o Flecha Abajo)
+    if (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W])
     {
-        if (!isAttacking)
-            oriented = NORTH; // Solo gira si NO está atacando
+        if (!isAttacking) oriented = NORTH;
         moveY -= moveSpeed * deltaTime;
     }
-    else if (keystates[SDL_SCANCODE_DOWN])
+    else if (keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S])
     {
-        if (!isAttacking)
-            oriented = SOUTH;
+        if (!isAttacking) oriented = SOUTH;
         moveY += moveSpeed * deltaTime;
     }
 
-    // 3. Calculamos el movimiento Horizontal
-    if (keystates[SDL_SCANCODE_LEFT])
+    // 3. Movimiento Horizontal (A o Flecha Izquierda / D o Flecha Derecha)
+    if (keystates[SDL_SCANCODE_LEFT] || keystates[SDL_SCANCODE_A])
     {
-        if (!isAttacking)
-            oriented = WEST;
+        if (!isAttacking) oriented = WEST;
         moveX -= moveSpeed * deltaTime;
     }
-    else if (keystates[SDL_SCANCODE_RIGHT])
+    else if (keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D])
     {
-        if (!isAttacking)
-            oriented = EAST;
+        if (!isAttacking) oriented = EAST;
         moveX += moveSpeed * deltaTime;
     }
 
-    // 4. Intentamos movernos solo en el Eje X
+    // 4. Eje X: Aplicar y colisionar
     if (moveX != 0)
     {
         x += moveX;
         if (checkCollision(x, y, grid))
         {
-            x = oldX;           // Si chocamos en X, deshacemos el movimiento horizontal
-            knockbackVX = 0.0f; // Matamos la inercia si chocamos contra la pared
+            x = oldX;
+            knockbackVX = 0.0f;
         }
     }
 
-    // 5. Intentamos movernos solo en el Eje Y
+    // 5. Eje Y: Aplicar y colisionar
     if (moveY != 0)
     {
         y += moveY;
         if (checkCollision(x, y, grid))
         {
-            y = oldY;           // Si chocamos en Y, deshacemos el movimiento vertical
-            knockbackVY = 0.0f; // Matamos la inercia si chocamos contra la pared
+            y = oldY;
+            knockbackVY = 0.0f;
         }
     }
 }
@@ -195,6 +189,8 @@ void Player::animationLogic(double deltaTime)
         bool isMoving = keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_LEFT] ||
                         keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_DOWN];
 
+        isMoving = isMoving || keystates[SDL_SCANCODE_W] || keystates[SDL_SCANCODE_A] ||
+                        keystates[SDL_SCANCODE_S] || keystates[SDL_SCANCODE_D];
         if (isMoving)
         {
             animTimer += deltaTime; // Acumulamos tiempo

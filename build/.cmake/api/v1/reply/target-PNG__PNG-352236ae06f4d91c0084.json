@@ -8,12 +8,13 @@
 			"add_library",
 			"find_package",
 			"__find_dependency_common",
-			"find_dependency"
+			"find_dependency",
+			"set_target_properties"
 		],
 		"files" : 
 		[
-			"C:/Program Files/CMake/share/cmake-4.2/Modules/FindJPEG.cmake",
-			"C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindDependencyMacro.cmake",
+			"C:/msys64/ucrt64/share/cmake/Modules/FindPNG.cmake",
+			"C:/msys64/ucrt64/share/cmake/Modules/CMakeFindDependencyMacro.cmake",
 			"C:/msys64/ucrt64/lib/cmake/SDL2_image/sdl2_image-config.cmake",
 			"CMakeLists.txt"
 		],
@@ -35,7 +36,7 @@
 			{
 				"command" : 3,
 				"file" : 2,
-				"line" : 69,
+				"line" : 77,
 				"parent" : 2
 			},
 			{
@@ -57,7 +58,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 148,
+				"line" : 173,
+				"parent" : 6
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 174,
 				"parent" : 6
 			}
 		]
@@ -67,10 +74,24 @@
 		"major" : 2,
 		"minor" : 9
 	},
-	"id" : "JPEG::JPEG::@6890427a1f51a3e7e1df",
+	"id" : "PNG::PNG::@6890427a1f51a3e7e1df",
 	"imported" : true,
+	"interfaceCompileDependencies" : 
+	[
+		{
+			"backtrace" : 8,
+			"id" : "ZLIB::ZLIB::@6890427a1f51a3e7e1df"
+		}
+	],
+	"interfaceLinkLibraries" : 
+	[
+		{
+			"backtrace" : 8,
+			"id" : "ZLIB::ZLIB::@6890427a1f51a3e7e1df"
+		}
+	],
 	"local" : true,
-	"name" : "JPEG::JPEG",
+	"name" : "PNG::PNG",
 	"paths" : 
 	{
 		"build" : ".",

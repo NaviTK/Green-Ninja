@@ -6,10 +6,10 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-Projectile::Projectile(float x, float y, float targetX, float targetY, SDL_Texture *tex, float spd, float rng, int dmg)
-    : Entity(x, y, tex), speed(spd), maxRange(rng), distanceTraveled(0), damage(dmg)
+Projectile::Projectile()
+    : Entity(x, y, nullptr), speed(0), maxRange(0), distanceTraveled(0), damage(10), alive(false)
 {
-    // ... (Tu código actual del constructor se queda exactamente igual) ...
+    /*float x, float y, float targetX, float targetY,
     float deltaX = targetX - x;
     float deltaY = targetY - y;
     float distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -25,7 +25,7 @@ Projectile::Projectile(float x, float y, float targetX, float targetY, SDL_Textu
         dirX = 0;
         dirY = -1;
         angle = -90.0;
-    }
+    }*/
     srcRect = {0, 0, 32, 32};
     destRect.w = 16;
     destRect.h = 16;
@@ -33,7 +33,7 @@ Projectile::Projectile(float x, float y, float targetX, float targetY, SDL_Textu
     destRect.y = static_cast<int>(y);
 }
 
-// --- NUEVO: Setter de dirección para corregir el ángulo si un modificador cambia el rumbo ---
+// Setter por si un moficador cambia el rumbo del projectil
 void Projectile::setDirection(float dx, float dy)
 {
     dirX = dx;
@@ -119,4 +119,49 @@ void Projectile::setSize(float sizeMultiplier)
 float Projectile::getKnockback() const
 {
     return knockback;
+}
+
+bool Projectile::isAlive() const{
+    return alive;
+}
+
+void Projectile::kill() {
+    this->alive = false;
+    
+    // Opcional: Lo mandamos al "limbo" para que no interfiera 
+    // visualmente ni en colisiones fantasma
+    this->x = -1000.0f;
+    this->y = -1000.0f;
+    
+    // Si tuviera efectos de partículas, aquí es donde 
+    // dispararía la explosión antes de morir.
+}
+
+// Projectile.cpp
+void Projectile::setAlive(float x, float y, float targetX, float targetY, float spd, float range, float dmg, SDL_Texture* tex) {
+    float deltaX = targetX - x;
+    float deltaY = targetY - y;
+    float distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    if (distance > 0)
+    {
+        dirX = deltaX / distance;
+        dirY = deltaY / distance;
+        angle = std::atan2(deltaY, deltaX) * (180.0 / M_PI);
+    }
+    else
+    {
+        dirX = 0;
+        dirY = -1;
+        angle = -90.0;
+    }
+    this->x = x;
+    this->y = y;
+    this->speed = spd;
+    this->maxRange = range;
+    this->damage = dmg;
+    this->texture = tex;
+    
+    this->distanceTraveled = 0.0f;
+    this->alive = true;
 }

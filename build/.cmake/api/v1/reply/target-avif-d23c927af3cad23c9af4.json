@@ -1,5 +1,14 @@
 {
 	"abstract" : true,
+	"artifacts" : 
+	[
+		{
+			"path" : "C:/msys64/ucrt64/bin/libavif-16.dll"
+		},
+		{
+			"path" : "C:/msys64/ucrt64/lib/libavif.dll.a"
+		}
+	],
 	"backtrace" : 7,
 	"backtraceGraph" : 
 	{
@@ -8,13 +17,12 @@
 			"add_library",
 			"find_package",
 			"__find_dependency_common",
-			"find_dependency",
-			"set_target_properties"
+			"find_dependency"
 		],
 		"files" : 
 		[
-			"C:/Program Files/CMake/share/cmake-4.2/Modules/FindPNG.cmake",
-			"C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindDependencyMacro.cmake",
+			"C:/msys64/ucrt64/lib/cmake/libavif/libavif-config.cmake",
+			"C:/msys64/ucrt64/share/cmake/Modules/CMakeFindDependencyMacro.cmake",
 			"C:/msys64/ucrt64/lib/cmake/SDL2_image/sdl2_image-config.cmake",
 			"CMakeLists.txt"
 		],
@@ -36,7 +44,7 @@
 			{
 				"command" : 3,
 				"file" : 2,
-				"line" : 77,
+				"line" : 61,
 				"parent" : 2
 			},
 			{
@@ -58,13 +66,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 173,
-				"parent" : 6
-			},
-			{
-				"command" : 4,
-				"file" : 0,
-				"line" : 174,
+				"line" : 59,
 				"parent" : 6
 			}
 		]
@@ -74,29 +76,16 @@
 		"major" : 2,
 		"minor" : 9
 	},
-	"id" : "PNG::PNG::@6890427a1f51a3e7e1df",
+	"id" : "avif::@6890427a1f51a3e7e1df",
 	"imported" : true,
-	"interfaceCompileDependencies" : 
-	[
-		{
-			"backtrace" : 8,
-			"id" : "ZLIB::ZLIB::@6890427a1f51a3e7e1df"
-		}
-	],
-	"interfaceLinkLibraries" : 
-	[
-		{
-			"backtrace" : 8,
-			"id" : "ZLIB::ZLIB::@6890427a1f51a3e7e1df"
-		}
-	],
 	"local" : true,
-	"name" : "PNG::PNG",
+	"name" : "avif",
+	"nameOnDisk" : "libavif-16.dll",
 	"paths" : 
 	{
 		"build" : ".",
 		"source" : "."
 	},
 	"sources" : [],
-	"type" : "UNKNOWN_LIBRARY"
+	"type" : "SHARED_LIBRARY"
 }

@@ -12,8 +12,8 @@
 		],
 		"files" : 
 		[
-			"C:/msys64/ucrt64/lib/cmake/SDL2_image/Findwebp.cmake",
-			"C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindDependencyMacro.cmake",
+			"C:/msys64/ucrt64/lib/cmake/SDL2_image/Findlibjxl.cmake",
+			"C:/msys64/ucrt64/share/cmake/Modules/CMakeFindDependencyMacro.cmake",
 			"C:/msys64/ucrt64/lib/cmake/SDL2_image/sdl2_image-config.cmake",
 			"CMakeLists.txt"
 		],
@@ -35,7 +35,7 @@
 			{
 				"command" : 3,
 				"file" : 2,
-				"line" : 57,
+				"line" : 73,
 				"parent" : 2
 			},
 			{
@@ -57,7 +57,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 37,
+				"line" : 23,
 				"parent" : 6
 			}
 		]
@@ -67,10 +67,10 @@
 		"major" : 2,
 		"minor" : 9
 	},
-	"id" : "WebP::webp::@6890427a1f51a3e7e1df",
+	"id" : "libjxl::libjxl::@6890427a1f51a3e7e1df",
 	"imported" : true,
 	"local" : true,
-	"name" : "WebP::webp",
+	"name" : "libjxl::libjxl",
 	"paths" : 
 	{
 		"build" : ".",

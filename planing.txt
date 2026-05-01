@@ -1,0 +1,9 @@
+Aquí tienes el resumen de las optimizaciones para tu gestión de proyectiles:
+
+Cola de Disponibles: Evita recorrer todo el vector buscando un hueco libre ($O(N)$); permite obtener un proyectil inactivo de forma instantánea ($O(1)$). //-> Implementado
+
+Localidad de Caché: Los punteros dispersos en RAM causan "cache misses" lentos; usar un vector de objetos por valor (std::vector<Projectile>) acelera drásticamente el procesamiento de la CPU. //->descartado pierden el sentido al haver implementado la free stack
+
+Segregación por Swap: Iterar sobre proyectiles inactivos desperdicia ciclos de CPU; mantener los activos al inicio del vector mediante intercambios (swap) permite procesar solo los necesarios.// descartado para projectiles, PERO SE DEBE USAR PARA EFECTOS DE PARTICULAS, básicamente cuando se crea un elemento y hay un hueco libre antes en el vector se mueve a ese huevo libre, hay que ir con cuidado al trabajar directamente con índices. ya que se puede mover.
+
+Partición Espacial: Comparar cada proyectil contra cada enemigo es ineficiente en grandes cantidades ($O(N \times M)$); dividir el mapa en celdas limita los chequeos a entidades cercanas. // Por hacer

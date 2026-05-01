@@ -32,8 +32,6 @@ public:
 
 private:
     void Inicialize(int width, int height);
-
-private:
     // --- NUEVAS MINIFUNCIONES DE INICIALIZACIÓN ---
     bool initSDL(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
     void initGameWorld();
@@ -61,6 +59,7 @@ private:
     // Entidades
     Player *player;
     std::vector<Projectile *> projectiles;
+    std::vector<Projectile *> freeProjectiles;
     std::vector<Enemy *> enemies;
     // Texturas
     std::map<std::string, std::string> spritePaths;
@@ -73,6 +72,7 @@ private:
     Room *baseRoom;              // La habitación raíz del mapa, desde la que se generarán todas las demás (START). NOTA: También la usas como currentRoom.
     int depth = 5;               // limite de profundidad de creacion de habitaciones(distancia a la que esta el BOSS)
     Mapa mapa;
+    const int maxNumProjectiles = 200;
 };
 
 #endif

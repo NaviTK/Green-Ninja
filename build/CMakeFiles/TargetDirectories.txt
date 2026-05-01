@@ -1,3 +1,3 @@
-C:/LarianStudios/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir
-C:/LarianStudios/Green-Ninja/build/CMakeFiles/edit_cache.dir
-C:/LarianStudios/Green-Ninja/build/CMakeFiles/rebuild_cache.dir
+C:/i/Green-Ninja/build/CMakeFiles/ElementalGridTactics.dir
+C:/i/Green-Ninja/build/CMakeFiles/edit_cache.dir
+C:/i/Green-Ninja/build/CMakeFiles/rebuild_cache.dir

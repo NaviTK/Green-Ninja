@@ -1,14 +1,5 @@
 {
 	"abstract" : true,
-	"artifacts" : 
-	[
-		{
-			"path" : "C:/msys64/ucrt64/bin/libavif-16.dll"
-		},
-		{
-			"path" : "C:/msys64/ucrt64/lib/libavif.dll.a"
-		}
-	],
 	"backtrace" : 7,
 	"backtraceGraph" : 
 	{
@@ -21,8 +12,8 @@
 		],
 		"files" : 
 		[
-			"C:/msys64/ucrt64/lib/cmake/libavif/libavif-config.cmake",
-			"C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindDependencyMacro.cmake",
+			"C:/msys64/ucrt64/lib/cmake/SDL2_image/Findwebp.cmake",
+			"C:/msys64/ucrt64/share/cmake/Modules/CMakeFindDependencyMacro.cmake",
 			"C:/msys64/ucrt64/lib/cmake/SDL2_image/sdl2_image-config.cmake",
 			"CMakeLists.txt"
 		],
@@ -44,7 +35,7 @@
 			{
 				"command" : 3,
 				"file" : 2,
-				"line" : 61,
+				"line" : 57,
 				"parent" : 2
 			},
 			{
@@ -66,7 +57,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 59,
+				"line" : 37,
 				"parent" : 6
 			}
 		]
@@ -76,16 +67,15 @@
 		"major" : 2,
 		"minor" : 9
 	},
-	"id" : "avif::@6890427a1f51a3e7e1df",
+	"id" : "WebP::webp::@6890427a1f51a3e7e1df",
 	"imported" : true,
 	"local" : true,
-	"name" : "avif",
-	"nameOnDisk" : "libavif-16.dll",
+	"name" : "WebP::webp",
 	"paths" : 
 	{
 		"build" : ".",
 		"source" : "."
 	},
 	"sources" : [],
-	"type" : "SHARED_LIBRARY"
+	"type" : "UNKNOWN_LIBRARY"
 }

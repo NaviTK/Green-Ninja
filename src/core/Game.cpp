@@ -26,16 +26,28 @@ static bool checkCollisionAABB(const SDL_Rect &a, const SDL_Rect &b)
 // CONSTRUCTOR Y DESTRUCTOR
 // ============================================================================
 
-Game::Game() : window(nullptr), renderer(nullptr), isRunning(false), player(nullptr), currentRoom(nullptr), baseRoom(nullptr) {}
+Game::Game() : window(nullptr), renderer(nullptr), isRunning(false), player(nullptr), currentRoom(nullptr), baseRoom(nullptr) {
+    projectiles.reserve(maxNumProjectiles);
+    freeProjectiles.reserve(maxNumProjectiles); // Reservamos para evitar realojos
 
-Game::~Game()
-{
-    if (playerTexture)
-        SDL_DestroyTexture(playerTexture);
-    if (mapacheTexture)
-        SDL_DestroyTexture(mapacheTexture);
-    if (projectileTexture)
-        SDL_DestroyTexture(projectileTexture);
+    for (int i = 0; i < maxNumProjectiles; i++) {
+        Projectile * p = new Projectile();
+        projectiles.push_back(p);
+        freeProjectiles.push_back(p); // Lo añadimos a la lista de disponibles
+    }
+}
+
+Game::~Game() {
+    // Liberar texturas
+    if (playerTexture) SDL_DestroyTexture(playerTexture);
+    if (mapacheTexture) SDL_DestroyTexture(mapacheTexture);
+    if (projectileTexture) SDL_DestroyTexture(projectileTexture);
+
+    // Liberar el POOL de proyectiles (Fundamental para evitar fugas)
+    for (auto p : projectiles) {
+        delete p;
+    }
+    projectiles.clear();
 }
 
 // ============================================================================
@@ -100,17 +112,40 @@ void Game::initGameWorld()
 
     SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
     isRunning = true;
-
-    player->setShootCallback([this](float pX, float pY, int mX, int mY, float projectileSpeed, float projectileSize, float range, float damage) -> Projectile *
-                             {
-        float realSpeed = projectileSpeed * 100.0f;
-        float realRange = range * 100.0f;
-
-        Projectile* p = new Projectile(pX, pY, mX, mY, this->projectileTexture, realSpeed, realRange, damage);
-        p->setSize(projectileSize);
+    
+player->setShootCallback([this](float pX, float pY, int mX, int mY, float projectileSpeed, float projectileSize, float range, float damage) -> Projectile * {
+    
+    if (this->freeProjectiles.empty()) 
+    {
+        int expansionSize = 50; 
         
-        this->projectiles.push_back(p); 
-        return p; });
+        // Al añadir 50 a los 200 que ya existen, 'projectiles' 
+        // saltará probablemente a Capacity 400.
+        for (int i = 0; i < expansionSize; i++) 
+        {
+            Projectile* p = new Projectile();
+            this->projectiles.push_back(p);      
+            this->freeProjectiles.push_back(p);  
+        }
+
+        // Solo ajustamos el inventario maestro. 
+        // Pasará de Capacity 400 (aprox) a Capacity 250 exactos.
+        this->projectiles.shrink_to_fit();
+        std::cout << "[INFO] Nueva capacidad ajustada: " << this->projectiles.capacity() << std::endl;
+        // NOTA: No tocamos freeProjectiles. 
+        // Su Capacity sigue siendo 200, lo cual es perfecto para 
+        // ir recibiendo las balas que mueran sin reasignar memoria.
+    }
+
+    Projectile* p = this->freeProjectiles.back();
+    this->freeProjectiles.pop_back(); 
+
+    p->setAlive(pX, pY, (float)mX, (float)mY, projectileSpeed * 100.0f, range * 100.0f, damage, this->projectileTexture);
+    p->setSize(projectileSize);
+    
+    return p; 
+});
+     
 }
 
 void Game::LoadAllTextures(SDL_Renderer *renderer)
@@ -186,48 +221,37 @@ void Game::updateEntities(double deltaTime)
     camara.y = 0;
 }
 
-void Game::updateProjectiles(double deltaTime)
-{
+void Game::updateProjectiles(double deltaTime) {
     Grid *grid = currentRoom->getGrid();
     int tileSize = grid->getTileSize();
 
-    for (int i = 0; i < (int)projectiles.size(); i++)
-    {
-        projectiles[i]->update(deltaTime, grid);
+    for (auto p : projectiles) {
+        if (!p->isAlive()) continue; // Saltamos los inactivos
 
-        bool destroy = false;
-        SDL_Rect projRect = projectiles[i]->getDestRect();
+        p->update(deltaTime, grid);
 
-        if (projectiles[i]->isExpired())
-        {
-            destroy = true;
-        }
-        else
-        {
-            int gridX = (projRect.x + projRect.w / 2) / tileSize;
-            int gridY = (projRect.y + projRect.h / 2) / tileSize;
-
-            if (gridX >= 0 && gridX < grid->getCols() && gridY >= 0 && gridY < grid->getRows())
-            {
-                Tile currentTile = grid->GetTileAt(gridX, gridY);
-                if (currentTile.hasType(TileType::WALL) ||
-                    currentTile.hasType(TileType::ROCK1) ||
-                    currentTile.hasType(TileType::ROCK2))
-                {
-                    destroy = true;
-                }
-            }
-            else
-            {
-                destroy = true; // Salió del mapa
-            }
+        SDL_Rect projRect = p->getDestRect();
+        
+        // 1. Verificar si expiró por rango
+        if (p->isExpired()) {
+            p->kill();
+            freeProjectiles.push_back(p); // Vuelve a la pila de disponibles
+            continue;
         }
 
-        if (destroy)
-        {
-            delete projectiles[i];
-            projectiles.erase(projectiles.begin() + i);
-            i--; // Ajustamos el índice tras borrar
+        // 2. Verificar colisión con el escenario (Paredes/Rocas)
+        int gridX = (projRect.x + projRect.w / 2) / tileSize;
+        int gridY = (projRect.y + projRect.h / 2) / tileSize;
+
+        if (gridX >= 0 && gridX < grid->getCols() && gridY >= 0 && gridY < grid->getRows()) {
+            Tile currentTile = grid->GetTileAt(gridX, gridY);
+            if (currentTile.hasType(TileType::WALL) || currentTile.hasType(TileType::ROCK1) || currentTile.hasType(TileType::ROCK2)) {
+                p->kill();
+                freeProjectiles.push_back(p); // Vuelve a la pila de disponibles
+            }
+        } else {
+            p->kill(); // Fuera del mapa
+            freeProjectiles.push_back(p); // Vuelve a la pila de disponibles
         }
     }
 }
@@ -237,7 +261,7 @@ void Game::checkCollisions()
     SDL_Rect playerRect = player->getDestRect();
 
     // 1. Enemigo colisiona con Jugador
-    for (auto e : enemies)
+    for (Enemy* e : enemies)
     {
         SDL_Rect enemyRect = e->getDestRect();
         if (checkCollisionAABB(playerRect, enemyRect))
@@ -247,35 +271,25 @@ void Game::checkCollisions()
     }
 
     // 2. Proyectil colisiona con Enemigo
-    for (int i = 0; i < (int)projectiles.size(); i++)
-    {
-        SDL_Rect projRect = projectiles[i]->getDestRect();
-        bool projectileHit = false;
+    for (Projectile* p : projectiles) {
+        if (!p->isAlive()) continue;
 
-        for (int j = 0; j < (int)enemies.size(); j++)
-        {
+        SDL_Rect projRect = p->getDestRect();
+
+        for (int j = 0; j < (int)enemies.size(); j++) {
             SDL_Rect enemyRect = enemies[j]->getDestRect();
 
-            if (checkCollisionAABB(projRect, enemyRect))
-            {
-                enemies[j]->takeDamage(projectiles[i]);
-                projectileHit = true;
-
-                if (enemies[j]->isDead())
-                {
+            if (checkCollisionAABB(projRect, enemyRect)) {
+                enemies[j]->takeDamage(p);
+                p->kill(); // Cambiamos delete por kill
+                freeProjectiles.push_back(p);
+                if (enemies[j]->isDead()) {
                     delete enemies[j];
                     enemies.erase(enemies.begin() + j);
-                    j--; // Ajustamos el índice
+                    j--;
                 }
-                break; // Un proyectil solo impacta a un enemigo
+                break; 
             }
-        }
-
-        if (projectileHit)
-        {
-            delete projectiles[i];
-            projectiles.erase(projectiles.begin() + i);
-            i--; // Ajustamos el índice
         }
     }
 }
@@ -364,15 +378,14 @@ bool Game::weAreInADoor(int col, int row, Grid *grid)
     return false;
 }
 
-void Game::clearRoomEntities()
-{
-    for (auto e : enemies)
-        delete e;
+void Game::clearRoomEntities() {
+    for (auto e : enemies) delete e;
     enemies.clear();
 
-    for (auto p : projectiles)
-        delete p;
-    projectiles.clear();
+    // NO borramos el vector, solo "matamos" los proyectiles activos
+    for (auto p : projectiles) {
+        p->kill();
+    }
 }
 
 void Game::spawnRoomEnemies()
@@ -409,7 +422,7 @@ void Game::render()
         player->render(renderer, camara);
 
     for (auto p : projectiles)
-        p->render(renderer, camara);
+        if (p->isAlive()) p->render(renderer, camara);
 
     renderHUD();
 

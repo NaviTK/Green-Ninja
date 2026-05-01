@@ -10,20 +10,21 @@ class Grid;
 class Projectile : public Entity
 {
 private:
+    bool alive;
     float dirX, dirY;
     float speed;
     float distanceTraveled;
     float maxRange;
     float knockback = 300.0f;
     double angle;
-    float damage;
+    float damage = 10;
 
     // --- NUEVO: Sistema de modificadores y color ---
     std::vector<std::unique_ptr<ProjectileModifier>> modifiers;
     SDL_Color color = {255, 255, 255, 255}; // Blanco por defecto (sin tinte)
 
 public:
-    Projectile(float x, float y, float targetX, float targetY, SDL_Texture *tex, float spd, float rng, int dmg = 10);
+    Projectile();
 
     // --- NUEVOS MÉTODOS PARA MODIFICADORES ---
     void addModifier(std::unique_ptr<ProjectileModifier> mod);
@@ -41,6 +42,9 @@ public:
     void update(double deltaTime, Grid *grid) override;
     void render(SDL_Renderer *renderer, const SDL_Rect &camera) override;
 
+    bool isAlive() const;
+    void kill();
+    void setAlive(float x, float y, float tX, float tY, float spd, float range, float dmg, SDL_Texture* tex);
     bool isExpired() const;
     SDL_Rect getCollider() const;
     float getDamage() const;

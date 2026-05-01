@@ -12,8 +12,8 @@
 		],
 		"files" : 
 		[
-			"C:/Program Files/CMake/share/cmake-4.2/Modules/FindTIFF.cmake",
-			"C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindDependencyMacro.cmake",
+			"C:/msys64/ucrt64/share/cmake/Modules/FindTIFF.cmake",
+			"C:/msys64/ucrt64/share/cmake/Modules/CMakeFindDependencyMacro.cmake",
 			"C:/msys64/ucrt64/lib/cmake/SDL2_image/sdl2_image-config.cmake",
 			"CMakeLists.txt"
 		],
