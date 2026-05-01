@@ -152,6 +152,30 @@ src/Main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\ElementalGridTactics.dir\build.make CMakeFiles/ElementalGridTactics.dir/src/Main.cpp.s
 .PHONY : src/Main.cpp.s
 
+src/core/ConfigManager.obj: src/core/ConfigManager.cpp.obj
+.PHONY : src/core/ConfigManager.obj
+
+# target to build an object file
+src/core/ConfigManager.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ElementalGridTactics.dir\build.make CMakeFiles/ElementalGridTactics.dir/src/core/ConfigManager.cpp.obj
+.PHONY : src/core/ConfigManager.cpp.obj
+
+src/core/ConfigManager.i: src/core/ConfigManager.cpp.i
+.PHONY : src/core/ConfigManager.i
+
+# target to preprocess a source file
+src/core/ConfigManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ElementalGridTactics.dir\build.make CMakeFiles/ElementalGridTactics.dir/src/core/ConfigManager.cpp.i
+.PHONY : src/core/ConfigManager.cpp.i
+
+src/core/ConfigManager.s: src/core/ConfigManager.cpp.s
+.PHONY : src/core/ConfigManager.s
+
+# target to generate assembly for a file
+src/core/ConfigManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ElementalGridTactics.dir\build.make CMakeFiles/ElementalGridTactics.dir/src/core/ConfigManager.cpp.s
+.PHONY : src/core/ConfigManager.cpp.s
+
 src/core/Game.obj: src/core/Game.cpp.obj
 .PHONY : src/core/Game.obj
 
@@ -428,6 +452,9 @@ help:
 	@echo ... src/Main.obj
 	@echo ... src/Main.i
 	@echo ... src/Main.s
+	@echo ... src/core/ConfigManager.obj
+	@echo ... src/core/ConfigManager.i
+	@echo ... src/core/ConfigManager.s
 	@echo ... src/core/Game.obj
 	@echo ... src/core/Game.i
 	@echo ... src/core/Game.s

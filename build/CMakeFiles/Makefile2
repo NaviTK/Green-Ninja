@@ -84,12 +84,12 @@ clean: CMakeFiles/ElementalGridTactics.dir/clean
 CMakeFiles/ElementalGridTactics.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\ElementalGridTactics.dir\build.make CMakeFiles/ElementalGridTactics.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\ElementalGridTactics.dir\build.make CMakeFiles/ElementalGridTactics.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13 "Built target ElementalGridTactics"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14 "Built target ElementalGridTactics"
 .PHONY : CMakeFiles/ElementalGridTactics.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/ElementalGridTactics.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\i\Green-Ninja\build\CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\i\Green-Ninja\build\CMakeFiles 14
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/ElementalGridTactics.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\i\Green-Ninja\build\CMakeFiles 0
 .PHONY : CMakeFiles/ElementalGridTactics.dir/rule
@@ -101,7 +101,7 @@ ElementalGridTactics: CMakeFiles/ElementalGridTactics.dir/rule
 # codegen rule for target.
 CMakeFiles/ElementalGridTactics.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\ElementalGridTactics.dir\build.make CMakeFiles/ElementalGridTactics.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13 "Finished codegen for target ElementalGridTactics"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\i\Green-Ninja\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14 "Finished codegen for target ElementalGridTactics"
 .PHONY : CMakeFiles/ElementalGridTactics.dir/codegen
 
 # clean rule for target.

@@ -96,25 +96,25 @@ void Player::movementLogic(double deltaTime, Grid *grid)
         knockbackVY -= knockbackVY * friction * deltaTime;
     }
 
-    // 2. Movimiento Vertical (W o Flecha Arriba / S o Flecha Abajo)
-    if (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W])
+    // 2. Movimiento Vertical (Usando las variables dinámicas)
+    if (keystates[this->keyUp])
     {
         if (!isAttacking) oriented = NORTH;
         moveY -= moveSpeed * deltaTime;
     }
-    else if (keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S])
+    else if (keystates[this->keyDown])
     {
         if (!isAttacking) oriented = SOUTH;
         moveY += moveSpeed * deltaTime;
     }
 
-    // 3. Movimiento Horizontal (A o Flecha Izquierda / D o Flecha Derecha)
-    if (keystates[SDL_SCANCODE_LEFT] || keystates[SDL_SCANCODE_A])
+    // 3. Movimiento Horizontal (Usando las variables dinámicas)
+    if (keystates[this->keyLeft])
     {
         if (!isAttacking) oriented = WEST;
         moveX -= moveSpeed * deltaTime;
     }
-    else if (keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D])
+    else if (keystates[this->keyRight])
     {
         if (!isAttacking) oriented = EAST;
         moveX += moveSpeed * deltaTime;
@@ -186,11 +186,11 @@ void Player::animationLogic(double deltaTime)
     else
     {
         const Uint8 *keystates = SDL_GetKeyboardState(NULL);
-        bool isMoving = keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_LEFT] ||
-                        keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_DOWN];
+        
+        // Mucho más limpio: Comprobamos directamente las variables dinámicas
+        bool isMoving = keystates[this->keyRight] || keystates[this->keyLeft] ||
+                        keystates[this->keyUp] || keystates[this->keyDown];
 
-        isMoving = isMoving || keystates[SDL_SCANCODE_W] || keystates[SDL_SCANCODE_A] ||
-                        keystates[SDL_SCANCODE_S] || keystates[SDL_SCANCODE_D];
         if (isMoving)
         {
             animTimer += deltaTime; // Acumulamos tiempo
@@ -449,4 +449,24 @@ void Player::clearAllEffects()
 {
     activeEffects.clear();
     std::cout << "Todos los efectos han sido eliminados." << std::endl;
+}
+
+void Player::setkeybinds(const std::vector<std::pair<std::string,SDL_Scancode>>& bindings) {
+    for (const auto& bind : bindings) {
+        
+        // bind.first es el texto (ej: "up"), bind.second es el SDL_Scancode
+        if (bind.first == "up") {
+            this->keyUp = bind.second;
+        } 
+        else if (bind.first == "down") {
+            this->keyDown = bind.second;
+        } 
+        else if (bind.first == "left") {
+            this->keyLeft = bind.second;
+        } 
+        else if (bind.first == "right") {
+            this->keyRight = bind.second;
+        }
+        // En el futuro puedes añadir aquí: else if (bind.first == "shoot") ...
+    }
 }

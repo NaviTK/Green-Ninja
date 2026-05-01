@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/i/Green-Ninja/src/Main.cpp" "CMakeFiles/ElementalGridTactics.dir/src/Main.cpp.obj" "gcc" "CMakeFiles/ElementalGridTactics.dir/src/Main.cpp.obj.d"
+  "C:/i/Green-Ninja/src/core/ConfigManager.cpp" "CMakeFiles/ElementalGridTactics.dir/src/core/ConfigManager.cpp.obj" "gcc" "CMakeFiles/ElementalGridTactics.dir/src/core/ConfigManager.cpp.obj.d"
   "C:/i/Green-Ninja/src/core/Game.cpp" "CMakeFiles/ElementalGridTactics.dir/src/core/Game.cpp.obj" "gcc" "CMakeFiles/ElementalGridTactics.dir/src/core/Game.cpp.obj.d"
   "C:/i/Green-Ninja/src/core/TextureManager.cpp" "CMakeFiles/ElementalGridTactics.dir/src/core/TextureManager.cpp.obj" "gcc" "CMakeFiles/ElementalGridTactics.dir/src/core/TextureManager.cpp.obj.d"
   "C:/i/Green-Ninja/src/entities/Player.cpp" "CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj" "gcc" "CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj.d"

@@ -21,6 +21,10 @@ enum class ProjectileEffect
 class Player : public Entity
 {
 private:
+    SDL_Scancode keyUp = SDL_SCANCODE_W;
+    SDL_Scancode keyDown = SDL_SCANCODE_S;
+    SDL_Scancode keyLeft = SDL_SCANCODE_A;
+    SDL_Scancode keyRight = SDL_SCANCODE_D;
     // Atributos privados
     int timerUp, timerDown, timerLeft, timerRight;
     int frameWidth;
@@ -124,4 +128,7 @@ public:
     int getY() { return y; };
     float getHealth() { return health; }
     void setHealth(float newHealth) { health = newHealth; }
+
+    // Metodos para configurar las keybinds
+    void setkeybinds(const std::vector<std::pair<std::string,SDL_Scancode>>& bindings);
 };

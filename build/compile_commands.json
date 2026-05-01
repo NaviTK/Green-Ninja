@@ -1,0 +1,80 @@
+[
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\Main.cpp.obj -c C:\\i\\Green-Ninja\\src\\Main.cpp",
+  "file": "C:/i/Green-Ninja/src/Main.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/Main.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\core\\Game.cpp.obj -c C:\\i\\Green-Ninja\\src\\core\\Game.cpp",
+  "file": "C:/i/Green-Ninja/src/core/Game.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/core/Game.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\core\\TextureManager.cpp.obj -c C:\\i\\Green-Ninja\\src\\core\\TextureManager.cpp",
+  "file": "C:/i/Green-Ninja/src/core/TextureManager.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/core/TextureManager.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\core\\ConfigManager.cpp.obj -c C:\\i\\Green-Ninja\\src\\core\\ConfigManager.cpp",
+  "file": "C:/i/Green-Ninja/src/core/ConfigManager.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/core/ConfigManager.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\entities\\Player.cpp.obj -c C:\\i\\Green-Ninja\\src\\entities\\Player.cpp",
+  "file": "C:/i/Green-Ninja/src/entities/Player.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/entities/Player.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\entities\\Projectile.cpp.obj -c C:\\i\\Green-Ninja\\src\\entities\\Projectile.cpp",
+  "file": "C:/i/Green-Ninja/src/entities/Projectile.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/entities/Projectile.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\entities\\ProjectileModifiers.cpp.obj -c C:\\i\\Green-Ninja\\src\\entities\\ProjectileModifiers.cpp",
+  "file": "C:/i/Green-Ninja/src/entities/ProjectileModifiers.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/entities/ProjectileModifiers.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\entities\\enemies\\Enemy.cpp.obj -c C:\\i\\Green-Ninja\\src\\entities\\enemies\\Enemy.cpp",
+  "file": "C:/i/Green-Ninja/src/entities/enemies/Enemy.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/Enemy.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\entities\\enemies\\mapache.cpp.obj -c C:\\i\\Green-Ninja\\src\\entities\\enemies\\mapache.cpp",
+  "file": "C:/i/Green-Ninja/src/entities/enemies/mapache.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/mapache.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\entities\\enemies\\bat.cpp.obj -c C:\\i\\Green-Ninja\\src\\entities\\enemies\\bat.cpp",
+  "file": "C:/i/Green-Ninja/src/entities/enemies/bat.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/entities/enemies/bat.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\world\\Grid.cpp.obj -c C:\\i\\Green-Ninja\\src\\world\\Grid.cpp",
+  "file": "C:/i/Green-Ninja/src/world/Grid.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/world/Grid.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\world\\Room.cpp.obj -c C:\\i\\Green-Ninja\\src\\world\\Room.cpp",
+  "file": "C:/i/Green-Ninja/src/world/Room.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/world/Room.cpp.obj"
+},
+{
+  "directory": "C:/i/Green-Ninja/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/ElementalGridTactics.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ElementalGridTactics.dir\\src\\world\\Tile.cpp.obj -c C:\\i\\Green-Ninja\\src\\world\\Tile.cpp",
+  "file": "C:/i/Green-Ninja/src/world/Tile.cpp",
+  "output": "CMakeFiles/ElementalGridTactics.dir/src/world/Tile.cpp.obj"
+}
+]

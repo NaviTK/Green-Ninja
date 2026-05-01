@@ -19,6 +19,7 @@ set(SOURCES
     src/Main.cpp
     src/core/Game.cpp
     src/core/TextureManager.cpp
+    src/core/ConfigManager.cpp
     src/entities/Player.cpp
     src/entities/Projectile.cpp
     src/entities/ProjectileModifiers.cpp
@@ -31,7 +32,8 @@ set(SOURCES
 )
 
 # 3. CREAMOS EL EJECUTABLE
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES}
+    include/green-ninja/ConfigManager.hpp)
 
 # 4. ENLAZAMOS LAS LIBRERÍAS
 # Conectamos tu código con el código binario de SDL2

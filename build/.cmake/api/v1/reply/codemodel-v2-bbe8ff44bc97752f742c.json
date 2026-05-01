@@ -7,105 +7,105 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "JPEG::JPEG::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-JPEG__JPEG-1366e50c2adffaa63880.json",
+					"jsonFile" : "target-JPEG__JPEG-Debug-1366e50c2adffaa63880.json",
 					"name" : "JPEG::JPEG",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "PNG::PNG::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-PNG__PNG-352236ae06f4d91c0084.json",
+					"jsonFile" : "target-PNG__PNG-Debug-352236ae06f4d91c0084.json",
 					"name" : "PNG::PNG",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SDL2::SDL2::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SDL2__SDL2-fec5c850b79e5418e59b.json",
+					"jsonFile" : "target-SDL2__SDL2-Debug-fec5c850b79e5418e59b.json",
 					"name" : "SDL2::SDL2",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SDL2::SDL2-static::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SDL2__SDL2-static-5ab59735b3944727ca2a.json",
+					"jsonFile" : "target-SDL2__SDL2-static-Debug-5ab59735b3944727ca2a.json",
 					"name" : "SDL2::SDL2-static",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SDL2::SDL2main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SDL2__SDL2main-5a71da8caa3ddfb0fa79.json",
+					"jsonFile" : "target-SDL2__SDL2main-Debug-5a71da8caa3ddfb0fa79.json",
 					"name" : "SDL2::SDL2main",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SDL2::SDL2test::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SDL2__SDL2test-fe33b666e09e49a26e19.json",
+					"jsonFile" : "target-SDL2__SDL2test-Debug-fe33b666e09e49a26e19.json",
 					"name" : "SDL2::SDL2test",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SDL2_image::SDL2_image::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SDL2_image__SDL2_image-0b67e14dcbb978795676.json",
+					"jsonFile" : "target-SDL2_image__SDL2_image-Debug-0b67e14dcbb978795676.json",
 					"name" : "SDL2_image::SDL2_image",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SDL2_image::SDL2_image-static::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SDL2_image__SDL2_image-static-310627581464167203d2.json",
+					"jsonFile" : "target-SDL2_image__SDL2_image-static-Debug-310627581464167203d2.json",
 					"name" : "SDL2_image::SDL2_image-static",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "TIFF::CXX::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-TIFF__CXX-086460d21a2014561ea6.json",
+					"jsonFile" : "target-TIFF__CXX-Debug-086460d21a2014561ea6.json",
 					"name" : "TIFF::CXX",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "TIFF::TIFF::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-TIFF__TIFF-b4fab5f880f04b7c0575.json",
+					"jsonFile" : "target-TIFF__TIFF-Debug-b4fab5f880f04b7c0575.json",
 					"name" : "TIFF::TIFF",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "WebP::webp::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-WebP__webp-a6682b7781464e335e53.json",
+					"jsonFile" : "target-WebP__webp-Debug-a6682b7781464e335e53.json",
 					"name" : "WebP::webp",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "WebP::webpdemux::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-WebP__webpdemux-70c8cffc9bade54a2f33.json",
+					"jsonFile" : "target-WebP__webpdemux-Debug-70c8cffc9bade54a2f33.json",
 					"name" : "WebP::webpdemux",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZLIB::ZLIB::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ZLIB__ZLIB-385c7a1789f7eb62f19c.json",
+					"jsonFile" : "target-ZLIB__ZLIB-Debug-385c7a1789f7eb62f19c.json",
 					"name" : "ZLIB::ZLIB",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "avif::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-avif-d23c927af3cad23c9af4.json",
+					"jsonFile" : "target-avif-Debug-d23c927af3cad23c9af4.json",
 					"name" : "avif",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "libjxl::libjxl::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-libjxl__libjxl-9cc4d309edbf32a6b90e.json",
+					"jsonFile" : "target-libjxl__libjxl-Debug-9cc4d309edbf32a6b90e.json",
 					"name" : "libjxl::libjxl",
 					"projectIndex" : 0
 				}
@@ -132,7 +132,7 @@
 						14
 					],
 					"build" : ".",
-					"jsonFile" : "directory-.-f6f22219c74102c3da70.json",
+					"jsonFile" : "directory-.-Debug-f6f22219c74102c3da70.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.14"
@@ -145,7 +145,7 @@
 					]
 				}
 			],
-			"name" : "",
+			"name" : "Debug",
 			"projects" : 
 			[
 				{
@@ -183,7 +183,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ElementalGridTactics::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ElementalGridTactics-07c410bfaef79c61072a.json",
+					"jsonFile" : "target-ElementalGridTactics-Debug-d7dc09c4a1b7311510af.json",
 					"name" : "ElementalGridTactics",
 					"projectIndex" : 0
 				}

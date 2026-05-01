@@ -1,0 +1,11 @@
+# Controles de movimiento del Ninja Verde
+# (Puedes usar letras como W,A,S,D o flechas como Up, Down, Left, Right)
+
+up = W
+down = S
+left = A
+right = D
+
+# Controles futuros (ejemplo)
+# shoot = Space
+# potion = E

@@ -5,6 +5,8 @@
 #include "green-ninja/RoomType.hpp"
 #include "green-ninja/Mapache.hpp"
 #include "green-ninja/ProjectileModifiers.hpp"
+#include "green-ninja/Player.hpp"
+#include "green-ninja/ConfigManager.hpp"
 #include <string>
 #include <iostream>
 #include <cmath>
@@ -109,6 +111,10 @@ void Game::initGameWorld()
     float spawnY = filaCentro * tileSize;
 
     player = new Player(spawnX, spawnY, renderer, playerTexture);
+    ConfigManager configManager;
+    
+    // AQUÍ ESTÁ LA MAGIA: Simplemente le das la ruta a la carpeta assets
+    configManager.loadAndApplyConfig("../assets/config.txt", player);
 
     SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
     isRunning = true;
